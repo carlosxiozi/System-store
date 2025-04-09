@@ -8,7 +8,7 @@ import sweatAlert2 from 'sweetalert2';
 import {  getCategoriasApi } from '@/app/helpers/Producto';
 
 
-interface ModalProps {
+export interface ModalProps {
     show: boolean;
     handleClose: () => void;
     initialData?: {
