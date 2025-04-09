@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React,{ useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -22,7 +22,7 @@ export interface ModalProps {
     onSave: (data: { id?: number; name: string; descripcion: string; precio: number; code: string; categoria_id: number }) => void;
 }
 
-export default function ModalComponent({ show, handleClose, initialData, onSave }:ModalProps) {
+const ModalComponent: react.FC<ModalProps> = ({ show, handleClose, initialData, onSave })=> {
     const [formData, setFormData] = useState({
         name: '',
         descripcion: '',
@@ -163,4 +163,4 @@ export default function ModalComponent({ show, handleClose, initialData, onSave 
     );
 }
 
-
+export default ModalComponent;
