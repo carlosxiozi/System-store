@@ -15,7 +15,9 @@ import ButtonExcel from '@/app/components/Buttonexcel';
 const ProductosPage: React.FC = () => {
     // Hooks al principio del componente (en el mismo orden)
     const { producto: catalogoDataFromApi = { data: [] }, loading, error } = useProducto();
+
     const [currentPage, setCurrentPage] = useState(1);
+    
     const { rowsPerPage, totalPages } = usePagination(catalogoDataFromApi?.data || [], currentPage);
     const [showModal, setShowModal] = useState(false); // No debe cambiar de orden
     const [initialData, setInitialData] = useState<{ id?: number; name: string; descripcion: string; code: string; precio: number; categoria_id: number }>({
@@ -26,10 +28,10 @@ const ProductosPage: React.FC = () => {
         categoria_id: 0
     });
 
-    const paginatedData = catalogoDataFromApi?.data.slice(
-        (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage
-    );
+    const paginatedData = Array.isArray(catalogoDataFromApi?.data) 
+    ? catalogoDataFromApi?.data.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage) 
+    : [];
+
 
     // Funciones de manejo
     const handleDelete = (id: number) => {
@@ -55,7 +57,7 @@ const ProductosPage: React.FC = () => {
                         setTimeout(() => {
                             window.location.reload();
                         }, 1000);
-                    } catch (error) {
+                    } catch {
                         sweatAlert2.fire({
                             icon: 'error',
                             title: 'Error',
@@ -103,7 +105,7 @@ const ProductosPage: React.FC = () => {
                 window.location.reload();
             }, 1000);
 
-        } catch (error) {
+        } catch  {
             sweatAlert2.fire({
                 icon: 'error',
                 title: 'Error',

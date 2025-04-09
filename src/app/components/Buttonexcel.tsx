@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import * as XLSX from 'xlsx';
 import Swal from 'sweetalert2';
 
-interface Producto {
-    id: number;
-    name: string;
-    descripcion: string;
-    code: string;
-    precio: number;
-    categoria_id: number;
-}
 
 const ProductosPage: React.FC = () => {
     const [excelFile, setExcelFile] = useState<File | null>(null);

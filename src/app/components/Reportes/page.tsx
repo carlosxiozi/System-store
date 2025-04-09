@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Form, Dropdown, Table, Container, Row, Col } from "react-bootstrap";
 import Swal from "sweetalert2";
 
@@ -8,85 +8,72 @@ interface Venta {
   id: number;
   fecha: string;
   total: string;
-  cantidad: number; // Agregamos un campo de cantidad para calcular la cantidad total vendida
+  cantidad: number;
   created_at: string;
   updated_at: string;
 }
 
 const ReportesPage: React.FC = () => {
   const [ventas, setVentas] = useState<Venta[]>([]);
-  const [filtro, setFiltro] = useState<string>("dia"); // Filtro: día, semana, mes, año_mes
-  const [mesSeleccionado, setMesSeleccionado] = useState<number | null>(null); // Mes seleccionado si es 'anio_mes'
+  const [filtro, setFiltro] = useState<string>("dia");
+  const [mesSeleccionado, setMesSeleccionado] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [sumaTotalVenta, setSumaTotalVenta] = useState<number>(0); // Estado para la suma total
-  const [cantidadTotalVendida, setCantidadTotalVendida] = useState<number>(0); // Estado para la cantidad total
+  const [sumaTotalVenta, setSumaTotalVenta] = useState<number>(0);
+  const [cantidadTotalVendida, setCantidadTotalVendida] = useState<number>(0);
 
-  // Función para manejar el cambio en el filtro
   const handleFiltroChange = (selectedFiltro: string) => {
     setFiltro(selectedFiltro);
     if (selectedFiltro !== "anio_mes") {
-      setMesSeleccionado(null); // Resetear mes cuando no sea 'anio_mes'
+      setMesSeleccionado(null);
     }
   };
 
-  // Función para manejar el cambio en el mes
   const handleMesChange = (mes: number) => {
     setMesSeleccionado(mes);
   };
 
-  // Función para obtener las ventas de acuerdo al filtro seleccionado
-  const fetchVentas = async () => {
+  // Usamos useCallback para evitar que la función se recree en cada render
+  const fetchVentas = useCallback(async () => {
     setLoading(true);
     try {
-      let url = `http://localhost:8000/api/ventas`;
+      const url = `http://localhost:8000/api/ventas`;
       const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("No se pudo obtener los datos de ventas.");
+      }
       const data = await response.json();
 
-      // Filtrar las ventas según el filtro
       let filteredVentas = data;
       const today = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Mexico_City" }));
       const todayString = today.toISOString().split('T')[0];
+
+      // Filtrado según el filtro seleccionado
       switch (filtro) {
         case "dia":
-          // Filtrar las ventas que coincidan con la fecha de hoy
           filteredVentas = data.filter((venta: Venta) => {
-          const ventaFecha = new Date(venta.fecha);
-            // Convertir la fecha de venta a string en formato YYYY-MM-DD
+            const ventaFecha = new Date(venta.fecha);
             const ventaFechaString = ventaFecha.toISOString().split('T')[0];
-            // Comparar las fechas
             return ventaFechaString === todayString;
           });
-      
-          console.log("Ventas del día:", filteredVentas);
           break;
 
         case "semana":
-          // Calcular el inicio y el fin de la semana (lunes a domingo)
           const startOfWeek = new Date(today);
           startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Lunes de esta semana
-
           const endOfWeek = new Date(today);
           endOfWeek.setDate(today.getDate() - today.getDay() + 7); // Domingo de esta semana
 
-          // Filtrar las ventas que ocurren dentro de la semana
           filteredVentas = data.filter((venta: Venta) => {
             const ventaFecha = new Date(venta.fecha);
-            return (
-              ventaFecha >= startOfWeek &&
-              ventaFecha <= endOfWeek &&
-              ventaFecha.getFullYear() === today.getFullYear()
-            );
+            return ventaFecha >= startOfWeek && ventaFecha <= endOfWeek && ventaFecha.getFullYear() === today.getFullYear();
           });
           break;
 
         case "mes":
           filteredVentas = data.filter((venta: Venta) => {
             const ventaFecha = new Date(venta.fecha);
-            return (
-              ventaFecha.getMonth() === today.getMonth() &&
-              ventaFecha.getFullYear() === today.getFullYear()
-            );
+            return ventaFecha.getMonth() === today.getMonth() && ventaFecha.getFullYear() === today.getFullYear();
           });
           break;
 
@@ -114,8 +101,8 @@ const ReportesPage: React.FC = () => {
         0
       );
 
-      setSumaTotalVenta(sumaTotalVenta); // Guardar la suma total en el estado
-      setCantidadTotalVendida(cantidadTotalVendida); // Guardar la cantidad total en el estado
+      setSumaTotalVenta(sumaTotalVenta);
+      setCantidadTotalVendida(cantidadTotalVendida);
 
       setVentas(filteredVentas);
     } catch (error) {
@@ -128,12 +115,12 @@ const ReportesPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filtro, mesSeleccionado]); // Dependencias de useCallback
 
-  // Usar useEffect para obtener las ventas al cargar la página o cambiar filtro
+  // Llamamos a fetchVentas cada vez que cambian las dependencias
   useEffect(() => {
     fetchVentas();
-  }, [filtro, mesSeleccionado]); // Dependencias para cambiar cuando cambian filtro o mes
+  }, [fetchVentas]);
 
   return (
     <Container className="mt-4">

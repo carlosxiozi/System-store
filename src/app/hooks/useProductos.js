@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import { getProductoApi } from '../helpers/Producto';
 export function useProducto() {
     const [producto, setProducto] = useState(null);

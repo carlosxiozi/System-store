@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import sweatAlert2 from 'sweetalert2';
-import { getCategoriaById, getCategoriasApi } from '@/app/helpers/Producto';
+import {  getCategoriasApi } from '@/app/helpers/Producto';
 
 
 interface ModalProps {

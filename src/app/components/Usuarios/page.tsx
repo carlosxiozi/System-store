@@ -11,24 +11,24 @@ import CustomPagination from '@/app/components/Pagination/page';
 import ModalComponent from './Modal/page';
 import sweatAlert2 from 'sweetalert2';
 
-const ProductosPage: React.FC = () => {
+const UsuariosPage: React.FC = () => {
     // Hooks al principio del componente (en el mismo orden)
     const { usuarios: catalogoDataFromApi = { data: [] }, loading, error } = useUsuarioData();
     const [currentPage, setCurrentPage] = useState(1);
     const { rowsPerPage, totalPages } = usePagination(catalogoDataFromApi?.data || [], currentPage);
     const [showModal, setShowModal] = useState(false); // No debe cambiar de orden
-    const [initialData, setInitialData] = useState<{ id?: number; name: string; email?: string;role:string;created_at:string;updated_at:string }>({
+    const [initialData, setInitialData] = useState<{ id?: number; name: string; email?: string; role: string; created_at?: string; updated_at?: string }>({
         name: '',
         email: '',
         role: '',
-        created_at: '',
-        updated_at: '',
     });
+    
 
-    const paginatedData = catalogoDataFromApi?.slice(
-        (currentPage - 1) * rowsPerPage, // Índice de inicio
-        currentPage * rowsPerPage         // Índice de fin (no inclusivo)
+    const paginatedData = catalogoDataFromApi?.data?.slice(
+        (currentPage - 1) * rowsPerPage,
+        currentPage * rowsPerPage
     ) || [];
+    
     // Funciones de manejo
     const handleDelete = (id: number) => {
         sweatAlert2
@@ -47,13 +47,13 @@ const ProductosPage: React.FC = () => {
                         sweatAlert2.fire({
                             icon: 'success',
                             title: 'Eliminado',
-                            text: 'La categoría ha sido eliminada.',
+                            text: 'El usuario ha sido eliminada.',
                         });
                         // Recargar la página después de eliminar
                         setTimeout(() => {
                             window.location.reload();
                         }, 1000);
-                    } catch (error) {
+                    } catch  {
                         sweatAlert2.fire({
                             icon: 'error',
                             title: 'Error',
@@ -69,7 +69,6 @@ const ProductosPage: React.FC = () => {
     };
 
     const handleCreate = () => {
-        console.log('Crear usuario');
         setInitialData({ name: '', email: '', role: '', created_at: '', updated_at: '' });
         setShowModal(true);
     };
@@ -102,7 +101,7 @@ const ProductosPage: React.FC = () => {
                 window.location.reload();
             }, 1000);
 
-        } catch (error) {
+        } catch  {
             sweatAlert2.fire({
                 icon: 'error',
                 title: 'Error',
@@ -194,4 +193,4 @@ const ProductosPage: React.FC = () => {
     );
 };
 
-export default ProductosPage;
+export default UsuariosPage;

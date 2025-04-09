@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useCatalogo } from '@/app/hooks/useCatalogo';
@@ -8,7 +8,7 @@ import { updateCatalogoApi, deleteCatalogoApi, createCatalogoApi } from '@/app/h
 import { usePagination } from '@/app/hooks/usePaginacion';
 import Loading from '@/app/Loading/page';
 import CustomPagination from '@/app/components/Pagination/page';
-import ModalComponent from './Modal/page';
+import ModalComponent from './Modal/ModalComponent';
 import sweatAlert2 from 'sweetalert2';
 
 const CategoriaPage: React.FC = () => {
@@ -21,8 +21,8 @@ const CategoriaPage: React.FC = () => {
         name: '',
         descripcion: ''
     });
+    
 
-    // Generación de datos paginados
     const paginatedData = catalogoDataFromApi?.data.slice(
         (currentPage - 1) * rowsPerPage,
         currentPage * rowsPerPage
@@ -52,7 +52,7 @@ const CategoriaPage: React.FC = () => {
                         setTimeout(() => {
                             window.location.reload();
                         }, 1000);
-                    } catch (error) {
+                    } catch {
                         sweatAlert2.fire({
                             icon: 'error',
                             title: 'Error',
@@ -76,7 +76,6 @@ const CategoriaPage: React.FC = () => {
         try {
             let result;
             if (data.id) {
-                // Si hay un id, estamos editando
                 result = await updateCatalogoApi(data);
                 console.log('Categoría actualizada:', result);
                 sweatAlert2.fire({
@@ -85,7 +84,6 @@ const CategoriaPage: React.FC = () => {
                     text: 'Categoría actualizada exitosamente.',
                 });
             } else {
-                // Si no hay id, estamos creando
                 result = await createCatalogoApi(data);
                 console.log('Categoría creada:', result);
                 sweatAlert2.fire({
@@ -100,7 +98,7 @@ const CategoriaPage: React.FC = () => {
                 window.location.reload();
             }, 1000);
 
-        } catch (error) {
+        } catch  {
             sweatAlert2.fire({
                 icon: 'error',
                 title: 'Error',

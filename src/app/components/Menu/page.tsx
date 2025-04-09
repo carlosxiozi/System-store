@@ -4,7 +4,6 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
-import Row from 'react-bootstrap/Row';
 function NavbarComponent() {
   const handleCerrar = () => {
     localStorage.removeItem("token");
@@ -15,7 +14,7 @@ function NavbarComponent() {
       <Navbar bg="dark" data-bs-theme="dark">
         
         <Col xs={6} md={4}>
-             <Image src="/tienda.jpg" roundedCircle style={{height:"50px",width:"50px"}} />
+             <Image src="/tienda.jpg" roundedCircle style={{height:"50px",width:"50px"}} alt='' />
         </Col>
         <Container>
           <Navbar.Brand href="/components/Dashboard">Sistema Tienda</Navbar.Brand>
