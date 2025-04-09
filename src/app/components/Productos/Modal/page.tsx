@@ -54,7 +54,6 @@ export default function ModalComponent({ show, handleClose, initialData, onSave 
             fecthData();
         }
     }, [initialData]);
-    console.log("hola", data);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -162,6 +161,6 @@ export default function ModalComponent({ show, handleClose, initialData, onSave 
             </Modal.Footer>
         </Modal>
     );
-};
+}
 
 
