@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Image from 'next/image';
 import Swal from 'sweetalert2';
 import Button from 'react-bootstrap/Button';
 import Login from '@/app/helpers/auth';
@@ -14,6 +13,7 @@ function Auth() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [validated, setValidated] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
     interface User {
@@ -46,7 +46,8 @@ function Auth() {
                 });
                 router.push('components/Dashboard');      
             } 
-        } catch  {
+        } catch (error) {
+            setError('Hubo un error al iniciar sesión'); 
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -58,12 +59,13 @@ function Auth() {
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-blue-400">
             <div className="bg-white p-8 rounded shadow-md w-2xl h-124 flex">
-                    <Image src="/tienda.jpg" alt="Tienda" layout="fill" className="h-full w-full object-cover" />
-                  
+                <div className="w-1/2 flex items-center justify-center">
+                    <img src="/tienda.jpg" className="h-full w-full object-cover" />
                 </div>
                 <div className="w-1/2 flex flex-col justify-center px-8">
                     <p className="text-black">Sistema Tienda</p>
                     <h2 className="text-2xl text-black mb-6 text-center p-4">Iniciar Sesión</h2>
+                    {/* Mostrar error */}
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Form.Group  className="mb-4"  as={Col} md="12" controlId="validationCustom01">
                             <Form.Label>Email</Form.Label>
@@ -96,6 +98,7 @@ function Auth() {
                     </Form>
                 </div>
             </div>
+        </div>
     );
 }
 

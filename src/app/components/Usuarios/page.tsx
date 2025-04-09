@@ -1,13 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useUsuarioData } from '@/app/hooks/useUsuario';
 import { updateUsuario, deleteUsario, createUsuarios } from '@/app/helpers/Usuario';
 import { usePagination } from '@/app/hooks/usePaginacion';
 import Loading from '@/app/Loading/page';
-import CustomPagination from '@/app/components/Pagination/page';
 import ModalComponent from './Modal/page';
 import sweatAlert2 from 'sweetalert2';
 
@@ -22,8 +21,7 @@ const UsuariosPage: React.FC = () => {
         email: '',
         role: '',
     });
-    
-
+    console.log('catalogoDataFromApi', catalogoDataFromApi?.data);
     const paginatedData = catalogoDataFromApi?.data?.slice(
         (currentPage - 1) * rowsPerPage,
         currentPage * rowsPerPage
@@ -47,7 +45,7 @@ const UsuariosPage: React.FC = () => {
                         sweatAlert2.fire({
                             icon: 'success',
                             title: 'Eliminado',
-                            text: 'El usuario ha sido eliminada.',
+                            text: 'El usuario ha sido eliminado.',
                         });
                         // Recargar la página después de eliminar
                         setTimeout(() => {
@@ -57,7 +55,7 @@ const UsuariosPage: React.FC = () => {
                         sweatAlert2.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Ocurrió un error al eliminar la categoría.',
+                            text: 'Ocurrió un error al eliminar el usuario.',
                         });
                     }
                 }
@@ -73,26 +71,26 @@ const UsuariosPage: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleSave = async (data: { id?: number; name: string; email:string;role:string;created_at:string;updated_at:string }) => {
+    const handleSave = async (data: { id?: number; name: string; email: string; role: string; created_at: string; updated_at: string }) => {
         try {
             let result;
             if (data.id) {
                 // Si hay un id, estamos editando
                 result = await updateUsuario(data);
-                console.log('usuario actualizada:', result);
+                console.log('Usuario actualizado:', result);
                 sweatAlert2.fire({
                     icon: 'success',
                     title: 'Éxito',
-                    text: 'Categoría actualizada exitosamente.',
+                    text: 'Usuario actualizado exitosamente.',
                 });
             } else {
                 // Si no hay id, estamos creando
                 result = await createUsuarios(data);
-                console.log('usuario creada:', result);
+                console.log('Usuario creado:', result);
                 sweatAlert2.fire({
                     icon: 'success',
                     title: 'Éxito',
-                    text: 'usuario creada exitosamente.',
+                    text: 'Usuario creado exitosamente.',
                 });
             }
 
@@ -101,7 +99,7 @@ const UsuariosPage: React.FC = () => {
                 window.location.reload();
             }, 1000);
 
-        } catch  {
+        } catch {
             sweatAlert2.fire({
                 icon: 'error',
                 title: 'Error',
@@ -112,7 +110,7 @@ const UsuariosPage: React.FC = () => {
         setShowModal(false);
     };
 
-    const handleEditClick = (usuario: { id: number; name: string; email:string;role:string;created_at:string;updated_at:string }) => {
+    const handleEditClick = (usuario: { id: number; name: string; email: string; role: string; created_at: string; updated_at: string }) => {
         setInitialData({
             id: usuario.id,
             name: usuario.name,
@@ -132,7 +130,7 @@ const UsuariosPage: React.FC = () => {
             <div className="d-flex justify-content-between mb-3">
                 <h2>Usuarios</h2>
                 <Button variant="primary" onClick={handleCreate}>
-                    Crear usuarios
+                    Crear usuario
                 </Button>
             </div>
             <Table striped bordered hover>
@@ -141,14 +139,14 @@ const UsuariosPage: React.FC = () => {
                         <th>#</th>
                         <th>Nombre</th>
                         <th>Email</th>
-                        <th>role</th>
-                        <th>created</th>
-                        <th>updated</th>
+                        <th>Rol</th>
+                        <th>Fecha de Creación</th>
+                        <th>Fecha de Actualización</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {paginatedData.map((usuario: { id: number; name: string; email:string;role:string;created_at:string;updated_at:string }) => (
+                    {paginatedData.map((usuario: { id: number; name: string; email: string; role: string; created_at: string; updated_at: string }) => (
                         <tr key={usuario.id}>
                             <td>{usuario.id}</td>
                             <td>{usuario.name}</td>
@@ -177,11 +175,19 @@ const UsuariosPage: React.FC = () => {
                     ))}
                 </tbody>
             </Table>
-            <CustomPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handleChangePage}
-            />
+            <Pagination>
+                <Pagination.Prev onClick={() => handleChangePage(currentPage - 1)} disabled={currentPage === 1} />
+                {[...Array(totalPages)].map((_, index) => (
+                    <Pagination.Item
+                        key={index}
+                        active={currentPage === index + 1}
+                        onClick={() => handleChangePage(index + 1)}
+                    >
+                        {index + 1}
+                    </Pagination.Item>
+                ))}
+                <Pagination.Next onClick={() => handleChangePage(currentPage + 1)} disabled={currentPage === totalPages} />
+            </Pagination>
             <ModalComponent
                 show={showModal}
                 handleClose={() => setShowModal(false)}

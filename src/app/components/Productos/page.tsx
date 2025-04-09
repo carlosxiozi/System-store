@@ -7,19 +7,17 @@ import { useProducto } from '@/app/hooks/useProductos';
 import { updateProductoApi, deleteProductoApi, createProductoApi } from '@/app/helpers/Producto';
 import { usePagination } from '@/app/hooks/usePaginacion';
 import Loading from '@/app/Loading/page';
-import CustomPagination from '@/app/components/Pagination/page';
 import ModalComponent from './Modal/page';
 import sweatAlert2 from 'sweetalert2';
-// import * as XLSX from 'xlsx'; // Remove if unused
+import Pagination from 'react-bootstrap/Pagination';
 import ButtonExcel from '@/app/components/Buttonexcel';
-const ProductosPage: React.FC = () => {
-    // Hooks al principio del componente (en el mismo orden)
-    const { producto: catalogoDataFromApi = { data: [] }, loading, error } = useProducto();
 
+const ProductosPage: React.FC = () => {
+    // Hooks al principio del componente
+    const { producto: catalogoDataFromApi = { data: [] }, loading, error } = useProducto();
     const [currentPage, setCurrentPage] = useState(1);
-    
     const { rowsPerPage, totalPages } = usePagination(catalogoDataFromApi?.data || [], currentPage);
-    const [showModal, setShowModal] = useState(false); // No debe cambiar de orden
+    const [showModal, setShowModal] = useState(false);
     const [initialData, setInitialData] = useState<{ id?: number; name: string; descripcion: string; code: string; precio: number; categoria_id: number }>({
         name: '',
         descripcion: '',
@@ -28,10 +26,10 @@ const ProductosPage: React.FC = () => {
         categoria_id: 0
     });
 
-    const paginatedData = Array.isArray(catalogoDataFromApi?.data) 
-    ? catalogoDataFromApi?.data.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage) 
-    : [];
-
+    // Datos paginados
+    const paginatedData = Array.isArray(catalogoDataFromApi?.data)
+        ? catalogoDataFromApi?.data.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+        : [];
 
     // Funciones de manejo
     const handleDelete = (id: number) => {
@@ -81,7 +79,6 @@ const ProductosPage: React.FC = () => {
         try {
             let result;
             if (data.id) {
-                // Si hay un id, estamos editando
                 result = await updateProductoApi(data);
                 console.log('Categoría actualizada:', result);
                 sweatAlert2.fire({
@@ -90,7 +87,6 @@ const ProductosPage: React.FC = () => {
                     text: 'Categoría actualizada exitosamente.',
                 });
             } else {
-                // Si no hay id, estamos creando
                 result = await createProductoApi(data);
                 console.log('Categoría creada:', result);
                 sweatAlert2.fire({
@@ -131,12 +127,11 @@ const ProductosPage: React.FC = () => {
     if (loading) return <Loading />;
     if (error) return <div>Error: Ocurrió un error inesperado: Sin resultados</div>;
 
-
     return (
         <div className="container mt-4">
             <div className="flex justify-content-between mb-3">
                 <h2>Productos</h2>
-                <ButtonExcel  ></ButtonExcel>
+                <ButtonExcel />
                 <Button variant="primary" onClick={handleCreate}>
                     Crear Producto
                 </Button>
@@ -147,21 +142,21 @@ const ProductosPage: React.FC = () => {
                         <th>#</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
-                        <th>precio</th>
-                        <th>categoria</th>
-                        <th>code</th>
+                        <th>Precio</th>
+                        <th>Categoría</th>
+                        <th>Código</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {paginatedData?.map((productos: { id: number; name: string; descripcion: string; precio: number; code: string; categoria_id: number }) => (
+                    {paginatedData.map((productos: { id: number; name: string; descripcion: string; precio: number; code: string; categoria_id: number }) => (
                         <tr key={productos.id}>
                             <td>{productos.id}</td>
                             <td>{productos.name}</td>
                             <td>{productos.descripcion}</td>
                             <td>{productos.precio}</td>
-                            <td>{productos.code}</td>
                             <td>{productos.categoria_id}</td>
+                            <td>{productos.code}</td>
                             <td>
                                 <Button
                                     variant="warning"
@@ -183,11 +178,24 @@ const ProductosPage: React.FC = () => {
                     ))}
                 </tbody>
             </Table>
-            <CustomPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handleChangePage}
-            />
+
+            {/* Paginación */}
+            <div className="d-flex justify-content-center">
+                <Pagination>
+                    <Pagination.Prev onClick={() => handleChangePage(currentPage - 1)} disabled={currentPage === 1} />
+                    {[...Array(totalPages)].map((_, index) => (
+                        <Pagination.Item
+                            key={index}
+                            active={currentPage === index + 1}
+                            onClick={() => handleChangePage(index + 1)}
+                        >
+                            {index + 1}
+                        </Pagination.Item>
+                    ))}
+                    <Pagination.Next onClick={() => handleChangePage(currentPage + 1)} disabled={currentPage === totalPages} />
+                </Pagination>
+            </div>
+
             <ModalComponent
                 show={showModal}
                 handleClose={() => setShowModal(false)}

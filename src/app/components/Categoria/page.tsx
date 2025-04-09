@@ -5,24 +5,26 @@ import { Table, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useCatalogo } from '@/app/hooks/useCatalogo';
 import { updateCatalogoApi, deleteCatalogoApi, createCatalogoApi } from '@/app/helpers/catalogoApi';
-import { usePagination } from '@/app/hooks/usePaginacion';
 import Loading from '@/app/Loading/page';
-import CustomPagination from '@/app/components/Pagination/page';
 import ModalComponent from './Modal/ModalComponent';
 import sweatAlert2 from 'sweetalert2';
+import Pagination from 'react-bootstrap/Pagination';
 
 const CategoriaPage: React.FC = () => {
-    // Hooks al principio del componente (en el mismo orden)
+    // Hooks al principio del componente
     const { catalogo: catalogoDataFromApi = { data: [] }, loading, error } = useCatalogo();
     const [currentPage, setCurrentPage] = useState(1);
-    const { rowsPerPage, totalPages } = usePagination(catalogoDataFromApi?.data || [], currentPage);
-    const [showModal, setShowModal] = useState(false); // No debe cambiar de orden
+    const [rowsPerPage] = useState(5);  // Número de filas por página
+    const [showModal, setShowModal] = useState(false);
     const [initialData, setInitialData] = useState<{ id?: number; name: string; descripcion: string }>({
         name: '',
         descripcion: ''
     });
 
+    // Total de páginas
+    const totalPages = Math.ceil(catalogoDataFromApi?.data.length / rowsPerPage);
 
+    // Datos paginados
     const paginatedData = catalogoDataFromApi?.data.slice(
         (currentPage - 1) * rowsPerPage,
         currentPage * rowsPerPage
@@ -64,6 +66,11 @@ const CategoriaPage: React.FC = () => {
     };
 
     const handleChangePage = (page: number) => {
+        if (page < 1) {
+            page = 1;
+        } else if (page > totalPages) {
+            page = totalPages;
+        }
         setCurrentPage(page);
     };
 
@@ -77,7 +84,6 @@ const CategoriaPage: React.FC = () => {
             let result;
             if (data.id) {
                 result = await updateCatalogoApi(data);
-                console.log('Categoría actualizada:', result);
                 sweatAlert2.fire({
                     icon: 'success',
                     title: 'Éxito',
@@ -85,7 +91,6 @@ const CategoriaPage: React.FC = () => {
                 });
             } else {
                 result = await createCatalogoApi(data);
-                console.log('Categoría creada:', result);
                 sweatAlert2.fire({
                     icon: 'success',
                     title: 'Éxito',
@@ -98,14 +103,14 @@ const CategoriaPage: React.FC = () => {
                 window.location.reload();
             }, 1000);
 
-        } catch  {
+        } catch {
             sweatAlert2.fire({
                 icon: 'error',
                 title: 'Error',
                 text: 'Ocurrió un error al guardar la categoría.',
             });
         }
-        
+
         setShowModal(false);
     };
 
@@ -165,11 +170,24 @@ const CategoriaPage: React.FC = () => {
                     ))}
                 </tbody>
             </Table>
-            <CustomPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handleChangePage}
-            />
+
+            {/* Paginación de React Bootstrap */}
+            <div className="d-flex justify-content-center">
+                <Pagination>
+                    <Pagination.Prev onClick={() => handleChangePage(currentPage - 1)} disabled={currentPage === 1} />
+                    {[...Array(totalPages)].map((_, index) => (
+                        <Pagination.Item
+                            key={index}
+                            active={currentPage === index + 1}
+                            onClick={() => handleChangePage(index + 1)}
+                        >
+                            {index + 1}
+                        </Pagination.Item>
+                    ))}
+                    <Pagination.Next onClick={() => handleChangePage(currentPage + 1)} disabled={currentPage === totalPages} />
+                </Pagination>
+            </div>
+
             <ModalComponent
                 show={showModal}
                 handleClose={() => setShowModal(false)}
