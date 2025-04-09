@@ -13,7 +13,6 @@ function Auth() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [validated, setValidated] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
     interface User {
@@ -47,7 +46,6 @@ function Auth() {
                 router.push('components/Dashboard');      
             } 
         } catch (error) {
-            setError('Hubo un error al iniciar sesión'); 
             Swal.fire({
                 icon: "error",
                 title: "Oops...",

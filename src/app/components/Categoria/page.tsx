@@ -81,16 +81,16 @@ const CategoriaPage: React.FC = () => {
 
     const handleSave = async (data: { id?: number; name: string; descripcion: string }) => {
         try {
-            let result;
+            
             if (data.id) {
-                result = await updateCatalogoApi(data);
+                await updateCatalogoApi(data);
                 sweatAlert2.fire({
                     icon: 'success',
                     title: 'Éxito',
                     text: 'Categoría actualizada exitosamente.',
                 });
             } else {
-                result = await createCatalogoApi(data);
+                await createCatalogoApi(data);
                 sweatAlert2.fire({
                     icon: 'success',
                     title: 'Éxito',
