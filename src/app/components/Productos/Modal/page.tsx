@@ -22,7 +22,7 @@ interface ModalProps {
     onSave: (data: { id?: number; name: string; descripcion: string; precio: number; code: string; categoria_id: number }) => void;
 }
 
-const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, onSave }) => {
+export default function ModalComponent({ show, handleClose, initialData, onSave }:ModalProps) {
     const [formData, setFormData] = useState({
         name: '',
         descripcion: '',
@@ -164,4 +164,4 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
     );
 };
 
-export default ModalComponent;
+
