@@ -22,7 +22,7 @@ export interface ModalProps {
     onSave: (data: { id?: number; name: string; descripcion: string; precio: number; code: string; categoria_id: number }) => void;
 }
 
-const ModalComponent: react.FC<ModalProps> = ({ show, handleClose, initialData, onSave })=> {
+const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, onSave })=> {
     const [formData, setFormData] = useState({
         name: '',
         descripcion: '',
