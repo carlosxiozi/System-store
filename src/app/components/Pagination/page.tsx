@@ -7,15 +7,21 @@ interface PaginationProps {
     onPageChange: (page: number) => void;
 }
 
-const PaginationComponent: React.FC<PaginationProps> = ({ totalPages, currentPage, onPageChange }) => {
-    const [active, setActive] = useState(currentPage);
+interface PaginationComponentProps {
+    totalPages: number;
+    currentPage: number;
+    onPageChange: (page: number) => void;
+}
 
-    const handlePageChange = (pageNumber: number) => {
+const PaginationComponent: React.FC<PaginationComponentProps> = ({ totalPages, currentPage, onPageChange }) => {
+    const [active, setActive] = useState<number>(currentPage);
+
+    const handlePageChange = (pageNumber: number): void => {
         setActive(pageNumber);
         onPageChange(pageNumber);
     };
 
-    const items = [];
+    const items: JSX.Element[] = [];
     for (let number = 1; number <= totalPages; number++) {
         items.push(
             <Pagination.Item
@@ -31,7 +37,6 @@ const PaginationComponent: React.FC<PaginationProps> = ({ totalPages, currentPag
     return (
         <div>
             <Pagination>
-                
                 <Pagination.Prev
                     onClick={() => handlePageChange(Math.max(active - 1, 1))}
                 />
@@ -39,7 +44,6 @@ const PaginationComponent: React.FC<PaginationProps> = ({ totalPages, currentPag
                 <Pagination.Next
                     onClick={() => handlePageChange(Math.min(active + 1, totalPages))}
                 />
-               
             </Pagination>
         </div>
     );
