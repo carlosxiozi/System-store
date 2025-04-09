@@ -179,7 +179,6 @@ const UsuariosPage: React.FC = () => {
             </Table>
             <CustomPagination
                 currentPage={currentPage}
-                rowsPerPage={rowsPerPage}
                 totalPages={totalPages}
                 onPageChange={handleChangePage}
             />

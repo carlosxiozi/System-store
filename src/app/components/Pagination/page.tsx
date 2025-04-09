@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 interface PaginationProps {
     totalPages: number;
     currentPage: number;
-    rowsPerPage: number;
     onPageChange: (page: number) => void;
 }
 

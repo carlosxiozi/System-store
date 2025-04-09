@@ -21,7 +21,7 @@ const CategoriaPage: React.FC = () => {
         name: '',
         descripcion: ''
     });
-    
+
 
     const paginatedData = catalogoDataFromApi?.data.slice(
         (currentPage - 1) * rowsPerPage,
@@ -167,7 +167,6 @@ const CategoriaPage: React.FC = () => {
             </Table>
             <CustomPagination
                 currentPage={currentPage}
-                rowsPerPage={rowsPerPage}
                 totalPages={totalPages}
                 onPageChange={handleChangePage}
             />
