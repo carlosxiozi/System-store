@@ -1,11 +1,7 @@
 "use client";
 import Pagination from 'react-bootstrap/Pagination';
 import React, { useState } from 'react';
-interface PaginationProps {
-    totalPages: number;
-    currentPage: number;
-    onPageChange: (page: number) => void;
-}
+
 
 interface PaginationComponentProps {
     totalPages: number;
