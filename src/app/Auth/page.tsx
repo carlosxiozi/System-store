@@ -45,7 +45,7 @@ function Auth() {
                 });
                 router.push('components/Dashboard');      
             } 
-        } catch (error) {
+        } catch  {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -63,7 +63,7 @@ function Auth() {
                 <div className="w-1/2 flex flex-col justify-center px-8">
                     <p className="text-black">Sistema Tienda</p>
                     <h2 className="text-2xl text-black mb-6 text-center p-4">Iniciar Sesión</h2>
-                    {/* Mostrar error */}
+                    
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Form.Group  className="mb-4"  as={Col} md="12" controlId="validationCustom01">
                             <Form.Label>Email</Form.Label>
