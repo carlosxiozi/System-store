@@ -7,7 +7,7 @@ import { useProducto } from '@/app/hooks/useProductos';
 import { updateProductoApi, deleteProductoApi, createProductoApi } from '@/app/helpers/Producto';
 import { usePagination } from '@/app/hooks/usePaginacion';
 import Loading from '@/app/Loading/page';
-import ModalComponent from '@/app/components/Productos/Modal/page';
+import ModalComponent from '@/app/components/Productos/Modal/ModalComponent';
 import sweatAlert2 from 'sweetalert2';
 import Pagination from 'react-bootstrap/Pagination';
 import ButtonExcel from '@/app/components/Buttonexcel';

@@ -7,7 +7,7 @@ import { useUsuarioData } from '@/app/hooks/useUsuario';
 import { updateUsuario, deleteUsario, createUsuarios } from '@/app/helpers/Usuario';
 import { usePagination } from '@/app/hooks/usePaginacion';
 import Loading from '@/app/Loading/page';
-import ModalComponent from './Modal/page';
+import ModalComponent from './Modal/ModalComponent';
 import sweatAlert2 from 'sweetalert2';
 
 const UsuariosPage: React.FC = () => {
