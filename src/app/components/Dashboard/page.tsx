@@ -19,7 +19,6 @@ const Dashboard = () => {
   const [time, setTime] = useState<Date | null>(null);
   const [weather, setWeather] = useState<{ temperature: number; windspeed: number } | null>(null);
   const [listBuy, setListBuy] = useState<Producto[]>([]);
-  const [scanning, setScanning] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [paymentAmount, setPaymentAmount] = useState<number | "">("");
   const [change, setChange] = useState<number>(0);
@@ -69,16 +68,22 @@ const Dashboard = () => {
           );
           const data = await res.json();
           setWeather(data.current_weather);
-        } catch (err) {
-          console.error("Error al obtener el clima:", err);
-        }
+        } catch {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Ocurrió un error al obtener el clima.",
+            confirmButtonText: "Aceptar",
+            
+        });
+      }
       };
+      
       fetchWeather();
     }
   }, [isClient]);
 
   const handleScan = async (code: string) => {
-    setScanning(true);
     try {
       const res = await fetch(`http://localhost:8000/api/productos/code/${code}`);
       if (!res.ok){
@@ -106,16 +111,14 @@ const Dashboard = () => {
             : [...prev, { ...product, cantidad: 1 }];
         });
       }
-    } catch (err) {
+    } catch {
       Swal.fire({
         icon: "error",
         title: "Error",
         text: "Ocurrió un error al escanear el código.",
         confirmButtonText: "Aceptar",
       });
-    } finally {
-      setScanning(false);
-    }
+    } 
   };
 
   const handleManualSearch = async () => {
@@ -148,7 +151,7 @@ const Dashboard = () => {
           confirmButtonText: "Aceptar",
         });
       }
-    } catch (err) {
+    } catch  {
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -209,7 +212,7 @@ const Dashboard = () => {
       return;
     }if(listBuy.length > 0){
       try{
-        const res= await fetch("http://localhost:8000/api/ventas/create", {
+        await fetch("http://localhost:8000/api/ventas/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -228,7 +231,7 @@ const Dashboard = () => {
           text: `Cambio: $${change.toFixed(2)}`,
           confirmButtonText: "Aceptar",
         });
-      } catch (err) {
+      } catch {
         Swal.fire({
           icon: "error",
           title: "Error",
