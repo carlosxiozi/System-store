@@ -5,8 +5,7 @@ import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card } from "react-bootstrap";
 import { CloudSun, Clock } from "lucide-react";
-
-
+import BarcodeReader from "react-barcode-reader";
 import Swal from "sweetalert2";
 
 type Producto = {
@@ -20,6 +19,7 @@ const Dashboard = () => {
   const [time, setTime] = useState<Date | null>(null);
   const [weather, setWeather] = useState<{ temperature: number; windspeed: number } | null>(null);
   const [listBuy, setListBuy] = useState<Producto[]>([]);
+  const [scanning, setScanning] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [paymentAmount, setPaymentAmount] = useState<number | "">("");
   const [change, setChange] = useState<number>(0);
@@ -77,6 +77,46 @@ const Dashboard = () => {
     }
   }, [isClient]);
 
+  const handleScan = async (code: string) => {
+    setScanning(true);
+    try {
+      const res = await fetch(`http://localhost:8000/api/productos/code/${code}`);
+      if (!res.ok){
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se encontró el producto con el código escaneado.",
+          confirmButtonText: "Aceptar",
+        });
+        return;
+      }
+
+      const data = await res.json();
+      const product = data.data;
+
+      if (product) {
+        product.precio = parseFloat(product.precio);
+
+        setListBuy((prev) => {
+          const exists = prev.find((p) => p.id === product.id);
+          return exists
+            ? prev.map((p) =>
+              p.id === product.id ? { ...p, cantidad: p.cantidad + 1 } : p
+            )
+            : [...prev, { ...product, cantidad: 1 }];
+        });
+      }
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Ocurrió un error al escanear el código.",
+        confirmButtonText: "Aceptar",
+      });
+    } finally {
+      setScanning(false);
+    }
+  };
 
   const handleManualSearch = async () => {
     const code = searchInput.trim();
@@ -108,7 +148,7 @@ const Dashboard = () => {
           confirmButtonText: "Aceptar",
         });
       }
-    } catch  {
+    } catch (err) {
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -169,7 +209,7 @@ const Dashboard = () => {
       return;
     }if(listBuy.length > 0){
       try{
-         await fetch("http://localhost:8000/api/ventas/create", {
+        const res= await fetch("http://localhost:8000/api/ventas/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -188,7 +228,7 @@ const Dashboard = () => {
           text: `Cambio: $${change.toFixed(2)}`,
           confirmButtonText: "Aceptar",
         });
-      } catch {
+      } catch (err) {
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -356,6 +396,7 @@ const Dashboard = () => {
               </Card.Body>
             </Card>
           )}
+          <BarcodeReader onScan={handleScan} onError={(err: Error) => console.error(err)} />
         </div>
       </div>
     </div>
