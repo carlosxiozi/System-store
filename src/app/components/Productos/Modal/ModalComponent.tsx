@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React,{ useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -8,7 +8,7 @@ import sweatAlert2 from 'sweetalert2';
 import {  getCategoriasApi } from '@/app/helpers/Producto';
 
 
-interface ModalProps {
+export interface ModalProps {
     show: boolean;
     handleClose: () => void;
     initialData?: {
@@ -22,7 +22,7 @@ interface ModalProps {
     onSave: (data: { id?: number; name: string; descripcion: string; precio: number; code: string; categoria_id: number }) => void;
 }
 
-const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, onSave }) => {
+const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, onSave })=> {
     const [formData, setFormData] = useState({
         name: '',
         descripcion: '',
@@ -54,7 +54,6 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
             fecthData();
         }
     }, [initialData]);
-    console.log("hola", data);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -162,6 +161,6 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
             </Modal.Footer>
         </Modal>
     );
-};
+}
 
 export default ModalComponent;
