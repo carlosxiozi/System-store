@@ -71,7 +71,7 @@ const UsuariosPage: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleSave = async (data: { id?: number; name: string; email: string; role: string; created_at: string; updated_at: string }) => {
+    const handleSave = async (data: { id?: number; name: string; email: string; role: string; password?: string; created_at?: string; updated_at?: string }) => {
         try {
             let result;
             if (data.id) {

@@ -136,10 +136,10 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
                             aria-label="Selecciona una categoría"
                         >
                             <option value={0}>
-                                {data.name ? 'Selecciona otra categoría' : 'Selecciona categoría'}
+                                {data.length > 0 ? 'Selecciona otra categoría' : 'Selecciona categoría'}
                             </option>
-                            {Array.isArray(data.data) && data.data.length > 0 &&
-                                data.data.map((categoria) => (
+                            {data.length > 0 &&
+                                data.map((categoria) => (
                                     <option key={categoria.id} value={categoria.id}>
                                         {categoria.name}  {/* Mostramos el nombre de la categoría */}
                                     </option>

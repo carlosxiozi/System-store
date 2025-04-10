@@ -5,7 +5,8 @@ import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card } from "react-bootstrap";
 import { CloudSun, Clock } from "lucide-react";
-import BarcodeReader from "react-barcode-reader";
+
+
 import Swal from "sweetalert2";
 
 type Producto = {
@@ -76,43 +77,6 @@ const Dashboard = () => {
     }
   }, [isClient]);
 
-  const handleScan = async (code: string) => {
-    try {
-      const res = await fetch(`http://localhost:8000/api/productos/code/${code}`);
-      if (!res.ok){
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No se encontró el producto con el código escaneado.",
-          confirmButtonText: "Aceptar",
-        });
-        return;
-      }
-
-      const data = await res.json();
-      const product = data.data;
-
-      if (product) {
-        product.precio = parseFloat(product.precio);
-
-        setListBuy((prev) => {
-          const exists = prev.find((p) => p.id === product.id);
-          return exists
-            ? prev.map((p) =>
-              p.id === product.id ? { ...p, cantidad: p.cantidad + 1 } : p
-            )
-            : [...prev, { ...product, cantidad: 1 }];
-        });
-      }
-    } catch  {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Ocurrió un error al escanear el código.",
-        confirmButtonText: "Aceptar",
-      });
-    } 
-  };
 
   const handleManualSearch = async () => {
     const code = searchInput.trim();
@@ -392,7 +356,6 @@ const Dashboard = () => {
               </Card.Body>
             </Card>
           )}
-          <BarcodeReader onScan={handleScan} onError={(err: Error) => console.error(err)} />
         </div>
       </div>
     </div>

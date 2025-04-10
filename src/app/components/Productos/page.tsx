@@ -112,7 +112,7 @@ const ProductosPage: React.FC = () => {
         setShowModal(false);
     };
 
-    const handleEditClick = (productos: { id: number; name: string; descripcion: string, precio: number, categoria_id: number }) => {
+    const handleEditClick = (productos: { id: number; name: string; descripcion: string; precio: number; categoria_id: number; code: string }) => {
         setInitialData({
             id: productos.id,
             name: productos.name,
