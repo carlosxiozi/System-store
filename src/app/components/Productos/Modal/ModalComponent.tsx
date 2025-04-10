@@ -30,7 +30,7 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
         code: '',
         categoria_id: 0,
     });
-    const [data, setData] = useState<null[]>([]);
+    const [data, setData] = useState<{ id: number; name: string }[]>([]);
     useEffect(() => {
         if (initialData) {
             setFormData({
