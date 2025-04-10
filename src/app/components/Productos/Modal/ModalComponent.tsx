@@ -30,7 +30,7 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
         code: '',
         categoria_id: 0,
     });
-    const [data, setData] = useState<{ id: number; name: string }[]>([]);
+    const [data, setData] = useState<any[]>([]);
     useEffect(() => {
         if (initialData) {
             setFormData({
@@ -41,15 +41,15 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
                 categoria_id: initialData.categoria_id || 0,
             });
             const fecthData = async () => {
-                const data = await getCategoriasApi();
-                setData(data);
+                const response = await getCategoriasApi();
+                setData(response.data);
             }
             fecthData();
         } else {
             setFormData({ name: '', descripcion: '', precio: 0, code: '', categoria_id: 0 });
             const fecthData = async () => {
-                const data = await getCategoriasApi();
-                setData(data);
+                const response = await getCategoriasApi();
+                setData(response.data);
             }
             fecthData();
         }
@@ -131,23 +131,23 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
                         <Form.Label>Categoría</Form.Label>
                         <Form.Select
                             name="categoria_id"
-                            value={formData.categoria_id}  // Este valor debería estar relacionado con la categoría seleccionada
+                            value={formData?.categoria_id || ""}
                             onChange={handleChange}
                             aria-label="Selecciona una categoría"
                         >
-                            <option value={0}>
-                                {data.length > 0 ? 'Selecciona otra categoría' : 'Selecciona categoría'}
+                            <option value="" disabled>
+                                {data.length > 0
+                                    ? "Selecciona una categoría"
+                                    : "No hay categorías disponibles"}
                             </option>
 
-                            {Array.isArray(data) && data.length > 0 &&
-                                data.map((categoria: { id: number; name: string }) => (
+                            {data.map((categoria) => (
                                     <option key={categoria.id} value={categoria.id}>
                                         {categoria.name}
                                     </option>
-                                ))
-                            }
-
+                                ))}
                         </Form.Select>
+
 
 
                     </Form.Group>
