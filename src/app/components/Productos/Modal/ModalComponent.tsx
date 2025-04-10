@@ -1,11 +1,11 @@
 'use client';
 
-import React,{ useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import sweatAlert2 from 'sweetalert2';
-import {  getCategoriasApi } from '@/app/helpers/Producto';
+import { getCategoriasApi } from '@/app/helpers/Producto';
 
 
 export interface ModalProps {
@@ -22,7 +22,7 @@ export interface ModalProps {
     onSave: (data: { id?: number; name: string; descripcion: string; precio: number; code: string; categoria_id: number }) => void;
 }
 
-const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, onSave })=> {
+const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, onSave }) => {
     const [formData, setFormData] = useState({
         name: '',
         descripcion: '',
@@ -138,13 +138,15 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
                             <option value={0}>
                                 {data.length > 0 ? 'Selecciona otra categoría' : 'Selecciona categoría'}
                             </option>
-                            {data.length > 0 &&
+
+                            {Array.isArray(data) && data.length > 0 &&
                                 data.map((categoria: { id: number; name: string }) => (
                                     <option key={categoria.id} value={categoria.id}>
-                                        {categoria.name}  {/* Mostramos el nombre de la categoría */}
+                                        {categoria.name}
                                     </option>
                                 ))
                             }
+
                         </Form.Select>
 
 
