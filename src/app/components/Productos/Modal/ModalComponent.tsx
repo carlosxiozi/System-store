@@ -139,7 +139,7 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
                                 {data.length > 0 ? 'Selecciona otra categoría' : 'Selecciona categoría'}
                             </option>
                             {data.length > 0 &&
-                                data.map((categoria) => (
+                                data.map((categoria: { id: number; name: string }) => (
                                     <option key={categoria.id} value={categoria.id}>
                                         {categoria.name}  {/* Mostramos el nombre de la categoría */}
                                     </option>
