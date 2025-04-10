@@ -22,7 +22,7 @@ const CategoriaPage: React.FC = () => {
     });
 
     // Total de páginas
-    const totalPages = Math.ceil(catalogoDataFromApi.data.length / rowsPerPage);
+    const totalPages = Math.ceil((catalogoDataFromApi?.data?.length || 0) / rowsPerPage);
 
     // Datos paginados
     const paginatedData = catalogoDataFromApi?.data.slice(
