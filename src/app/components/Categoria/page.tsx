@@ -144,7 +144,7 @@ const CategoriaPage: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {paginatedData.map((categoria: { id: number; name: string; descripcion: string }) => (
+                    {(paginatedData ?? []).map((categoria: { id: number; name: string; descripcion: string }) => (
                         <tr key={categoria.id}>
                             <td>{categoria.id}</td>
                             <td>{categoria.name}</td>
