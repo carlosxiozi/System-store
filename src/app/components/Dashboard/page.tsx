@@ -118,7 +118,9 @@ const Dashboard = () => {
         text: "Ocurrió un error al escanear el código.",
         confirmButtonText: "Aceptar",
       });
-    } 
+    } finally {
+      setSearchInput("");
+    }
   };
 
   const handleManualSearch = async () => {
