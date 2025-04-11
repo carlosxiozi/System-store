@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
-import { Button, Table, Spinner, Alert, Container, Row, Col } from 'react-bootstrap';
-
+import { Button, Table, Spinner, Container } from 'react-bootstrap';
+import Loading from '@/app/Loading/page';
 type Venta = {
   id: number;
   fecha: string;
@@ -49,10 +49,9 @@ const ReportesVentas = () => {
       )}
 
       {!loading && ventas.length === 0 && (
-        <Alert variant="info" className="text-center">
-          No hay ventas por mostrar
-        </Alert>
+        <Loading></Loading>
       )}
+      
 
       {!loading && ventas.length > 0 && (
         <>
