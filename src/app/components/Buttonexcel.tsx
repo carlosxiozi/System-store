@@ -25,11 +25,11 @@ const ProductosPage: React.FC = () => {
     
         // Enviar el archivo al backend
         try {
-            const response = await fetch('http://localhost:8000/api/productos/import', {
+            const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/productos/import', {
                 method: 'POST',
                 body: formData, // Enviar el archivo como FormData
             });
-    
+            console.log("Archivo Excel:", response);
             if (response.ok) {
                 setImportStatus("Productos importados exitosamente.");
             } else {
@@ -39,6 +39,7 @@ const ProductosPage: React.FC = () => {
             console.error("Error al enviar los datos al backend:", error);
             setImportStatus("Hubo un problema al importar los productos.");
         }
+       
     };
     
 

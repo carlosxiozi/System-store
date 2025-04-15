@@ -1,5 +1,5 @@
 export async function getUsuarios() {
-    const response = await fetch('http://localhost:8000/api/usuarios',
+    const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/usuarios',
         {
             method: 'GET',
             headers: {
@@ -18,7 +18,7 @@ export async function createUsuarios(catalogo) {
     console.log('Entrando al fetch:', catalogo);
 
     try {
-        const response = await fetch('http://localhost:8000/api/usuarios/create', {
+        const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/usuarioscreate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export async function createUsuarios(catalogo) {
 }
 
 export async function updateUsuario(catalogo) {
-    const response = await fetch(`http://localhost:8000/api/usuarios/edit`, {
+    const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/usuarios/edit`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export async function updateUsuario(catalogo) {
     return data;
 }
 export async function deleteUsario(id) {
-    const response = await fetch(`http://localhost:8000/api/usuarios/delete`, {
+    const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/usuarios/delete`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

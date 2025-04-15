@@ -85,7 +85,7 @@ const Dashboard = () => {
 
   const handleScan = async (code: string) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/productos/code/${code}`);
+      const res = await fetch(`https://sistema-tiendasss-1.onrender.com/api/productos/code/${code}`);
       if (!res.ok){
         Swal.fire({
           icon: "error",
@@ -128,7 +128,7 @@ const Dashboard = () => {
     if (!code) return;
 
     try {
-      const res = await fetch(`http://localhost:8000/api/productos/code/${code}`);
+      const res = await fetch(`https://sistema-tiendasss-1.onrender.com/api/productos/code/${code}`);
       if (!res.ok) throw new Error(`Error: ${res.statusText}`);
 
       const data = await res.json();
@@ -214,7 +214,7 @@ const Dashboard = () => {
       return;
     }if(listBuy.length > 0){
       try{
-        await fetch("http://localhost:8000/api/ventas/create", {
+        await fetch("https://sistema-tiendasss-1.onrender.com/api/ventas/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

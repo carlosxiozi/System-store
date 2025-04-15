@@ -18,7 +18,7 @@ const ReportesVentas = () => {
   const fetchVentas = async (tipo: 'getToday' | 'getMonth' | 'getYear') => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/api/ventas/reportes/${tipo}`);
+      const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/ventas/reportes/${tipo}`);
       const data = await response.json();
       setVentas(data);
       const total = data.reduce((sum: number, venta: Venta) => sum + Number(venta.total), 0);
