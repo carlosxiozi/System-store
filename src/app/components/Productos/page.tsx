@@ -47,9 +47,22 @@ const ProductosPage: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleSave = async (data: any) => {
+    interface ProductoData {
+        id?: number;
+        name: string;
+        descripcion: string;
+        code: string;
+        precio: number;
+        categoria_id: number;
+    }
+
+    const handleSave = async (data: ProductoData) => {
         try {
-            const result = data.id ? await updateProductoApi(data) : await createProductoApi(data);
+             if (data.id && data.id > 0) {
+                 await updateProductoApi(data);
+             } else {
+                 await createProductoApi(data);
+             }
 
             sweatAlert2.fire({
                 icon: 'success',
@@ -99,7 +112,7 @@ const ProductosPage: React.FC = () => {
             });
     };
 
-    const handleEditClick = (producto: any) => {
+    const handleEditClick = (producto: ProductoData) => {
         setInitialData(producto);
         setShowModal(true);
     };
