@@ -13,25 +13,61 @@ import Pagination from 'react-bootstrap/Pagination';
 import ButtonExcel from '@/app/components/Buttonexcel';
 
 const ProductosPage: React.FC = () => {
-    // Hooks al principio del componente
     const { producto: catalogoDataFromApi = { data: [] }, loading, error } = useProducto();
     const [currentPage, setCurrentPage] = useState(1);
-    const { rowsPerPage, totalPages } = usePagination(catalogoDataFromApi?.data || [], currentPage);
+    const { rowsPerPage } = usePagination(catalogoDataFromApi?.data || [], currentPage);
     const [showModal, setShowModal] = useState(false);
-    const [initialData, setInitialData] = useState<{ id?: number; name: string; descripcion: string; code: string; precio: number; categoria_id: number }>({
+    const [initialData, setInitialData] = useState({
         name: '',
         descripcion: '',
         code: '',
         precio: 0,
         categoria_id: 0
     });
+    const [search, setSearch] = useState('');
 
-    // Datos paginados
-    const paginatedData = Array.isArray(catalogoDataFromApi?.data)
-        ? catalogoDataFromApi?.data.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-        : [];
+    // 🔍 Filtro local por nombre, código o precio
+    const filteredData = catalogoDataFromApi?.data?.filter((producto: { id: number; name: string; descripcion: string; code: string; precio: number; categoria_id: number }) => {
+        const searchLower = search.toLowerCase();
+        return (
+            producto.name.toLowerCase().includes(searchLower) ||
+            producto.code.toLowerCase().includes(searchLower) ||
+            producto.precio.toString().includes(searchLower)
+        );
+    }) || [];
 
-    // Funciones de manejo
+    // 📄 Paginación del resultado filtrado
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+    const paginatedData = filteredData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+
+    const handleChangePage = (page: number) => setCurrentPage(page);
+
+    const handleCreate = () => {
+        setInitialData({ name: '', descripcion: '', code: '', precio: 0, categoria_id: 0 });
+        setShowModal(true);
+    };
+
+    const handleSave = async (data: any) => {
+        try {
+            const result = data.id ? await updateProductoApi(data) : await createProductoApi(data);
+
+            sweatAlert2.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: data.id ? 'Producto actualizado exitosamente.' : 'Producto creado exitosamente.',
+            });
+
+            setTimeout(() => window.location.reload(), 1000);
+        } catch {
+            sweatAlert2.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ocurrió un error al guardar el producto.',
+            });
+        }
+        setShowModal(false);
+    };
+
     const handleDelete = (id: number) => {
         sweatAlert2
             .fire({
@@ -49,93 +85,62 @@ const ProductosPage: React.FC = () => {
                         sweatAlert2.fire({
                             icon: 'success',
                             title: 'Eliminado',
-                            text: 'La categoría ha sido eliminada.',
+                            text: 'El producto ha sido eliminado.',
                         });
-                        // Recargar la página después de eliminar
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 1000);
+                        setTimeout(() => window.location.reload(), 1000);
                     } catch {
                         sweatAlert2.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Ocurrió un error al eliminar la categoría.',
+                            text: 'Ocurrió un error al eliminar el producto.',
                         });
                     }
                 }
             });
     };
 
-    const handleChangePage = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleCreate = () => {
-        setInitialData({ name: '', descripcion: '', code: '', precio: 0, categoria_id: 0 });
-        setShowModal(true);
-    };
-
-    const handleSave = async (data: { id?: number; name: string; descripcion: string }) => {
-        try {
-            let result;
-            if (data.id) {
-                result = await updateProductoApi(data);
-                console.log('Categoría actualizada:', result);
-                sweatAlert2.fire({
-                    icon: 'success',
-                    title: 'Éxito',
-                    text: 'Categoría actualizada exitosamente.',
-                });
-            } else {
-                result = await createProductoApi(data);
-                console.log('Categoría creada:', result);
-                sweatAlert2.fire({
-                    icon: 'success',
-                    title: 'Éxito',
-                    text: 'Categoría creada exitosamente.',
-                });
-            }
-
-            // Recargar la página después de guardar
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
-
-        } catch  {
-            sweatAlert2.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Ocurrió un error al guardar la categoría.',
-            });
-        }
-
-        setShowModal(false);
-    };
-
-    const handleEditClick = (productos: { id: number; name: string; descripcion: string; precio: number; categoria_id: number; code: string }) => {
-        setInitialData({
-            id: productos.id,
-            name: productos.name,
-            descripcion: productos.descripcion,
-            code: productos.code || '',
-            precio: productos.precio,
-            categoria_id: productos.categoria_id
-        });
+    const handleEditClick = (producto: any) => {
+        setInitialData(producto);
         setShowModal(true);
     };
 
     if (loading) return <Loading />;
-    if (error) return <div>Error: Ocurrió un error inesperado: Sin resultados</div>;
+    if (error) return <div>Error: Ocurrió un error inesperado.</div>;
 
     return (
-        <div className="container mt-4">
-            <div className="flex justify-content-between mb-3">
-                <h2>Productos</h2>
-                <ButtonExcel />
-                <Button variant="primary" onClick={handleCreate}>
-                    Crear Producto
-                </Button>
+        <div className="container ">
+            <div className="container mt-4">
+                <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                    <h2 className="mb-0 me-auto">Productos</h2>
+
+                    <div className="d-flex flex-wrap gap-2" style={{ minWidth: '300px', flex: 1 }}>
+                        <div className="flex-grow-1">
+                            <ButtonExcel />
+                        </div>
+
+                        <div className="flex-grow-1">
+                            <Button variant="primary" className="w-50" onClick={handleCreate}>
+                                Crear Producto
+                            </Button>
+                        </div>
+
+                        <div className="flex-grow-1 w-100">
+                            <input
+                                type="text"
+                                placeholder="Buscar por nombre, código o precio..."
+                                className="form-control w-100"
+                                value={search}
+                                onChange={(e) => {
+                                    setSearch(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -149,52 +154,50 @@ const ProductosPage: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {paginatedData.map((productos: { id: number; name: string; descripcion: string; precio: number; code: string; categoria_id: number }) => (
-                        <tr key={productos.id}>
-                            <td>{productos.id}</td>
-                            <td>{productos.name}</td>
-                            <td>{productos.descripcion}</td>
-                            <td>{productos.precio}</td>
-                            <td>{productos.categoria_id}</td>
-                            <td>{productos.code}</td>
-                            <td>
-                                <Button
-                                    variant="warning"
-                                    size="sm"
-                                    className="me-2"
-                                    onClick={() => handleEditClick(productos)}
-                                >
-                                    Editar
-                                </Button>
-                                <Button
-                                    variant="danger"
-                                    size="sm"
-                                    onClick={() => handleDelete(productos.id)}
-                                >
-                                    Eliminar
-                                </Button>
-                            </td>
+                    {paginatedData.length > 0 ? (
+                        paginatedData.map((producto: { id: number; name: string; descripcion: string; code: string; precio: number; categoria_id: number }) => (
+                            <tr key={producto.id}>
+                                <td>{producto.id}</td>
+                                <td>{producto.name}</td>
+                                <td>{producto.descripcion}</td>
+                                <td>{producto.precio}</td>
+                                <td>{producto.categoria_id}</td>
+                                <td>{producto.code}</td>
+                                <td>
+                                    <Button variant="warning" size="sm" className="me-2" onClick={() => handleEditClick(producto)}>
+                                        Editar
+                                    </Button>
+                                    <Button variant="danger" size="sm" onClick={() => handleDelete(producto.id)}>
+                                        Eliminar
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={7} className="text-center">No se encontraron productos.</td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </Table>
 
-            {/* Paginación */}
-            <div className="d-flex justify-content-center">
-                <Pagination>
-                    <Pagination.Prev onClick={() => handleChangePage(currentPage - 1)} disabled={currentPage === 1} />
-                    {[...Array(totalPages)].map((_, index) => (
-                        <Pagination.Item
-                            key={index}
-                            active={currentPage === index + 1}
-                            onClick={() => handleChangePage(index + 1)}
-                        >
-                            {index + 1}
-                        </Pagination.Item>
-                    ))}
-                    <Pagination.Next onClick={() => handleChangePage(currentPage + 1)} disabled={currentPage === totalPages} />
-                </Pagination>
-            </div>
+            {filteredData.length > rowsPerPage && (
+                <div className="d-flex justify-content-center">
+                    <Pagination>
+                        <Pagination.Prev onClick={() => handleChangePage(currentPage - 1)} disabled={currentPage === 1} />
+                        {[...Array(totalPages)].map((_, index) => (
+                            <Pagination.Item
+                                key={index}
+                                active={currentPage === index + 1}
+                                onClick={() => handleChangePage(index + 1)}
+                            >
+                                {index + 1}
+                            </Pagination.Item>
+                        ))}
+                        <Pagination.Next onClick={() => handleChangePage(currentPage + 1)} disabled={currentPage === totalPages} />
+                    </Pagination>
+                </div>
+            )}
 
             <ModalComponent
                 show={showModal}
