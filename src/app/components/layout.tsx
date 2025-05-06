@@ -4,7 +4,7 @@ import Menu from "@/app/components/Menu/page";
 import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useRouter } from "next/navigation";
-
+import Sidebar from "@/app/components/Sidebar/page";
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const router = useRouter();
@@ -40,11 +40,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex flex-col h-screen w-screen">
+    <div className="flex min-h-screen w-screen transition-all duration-300  bg-blue-100">
+   
+    <Sidebar />
+  
+    {/* Contenedor derecho: menu arriba + contenido */}
+    <div className="flex flex-col flex-1 overflow-hidden">
       <Menu />
-      <div className="flex-1 overflow-y-auto">
+  
+      <main className="flex-1 overflow-auto p-2">
         {children}
-      </div>
+      </main>
     </div>
+  </div>
+  
   );
 }
