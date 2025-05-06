@@ -25,7 +25,7 @@ export interface ModalProps {
 const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, onSave }) => {
     const [formData, setFormData] = useState({
         name: '',
-        descripcion: '',
+        descripcion: 'descripcion',
         precio: 0,
         code: '',
         categoria_id: 0,
@@ -35,7 +35,7 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
         if (initialData) {
             setFormData({
                 name: initialData.name || '',
-                descripcion: initialData.descripcion || '',
+                descripcion: initialData.descripcion || 'descripcion',
                 precio: initialData.precio || 0,
                 code: initialData.code || '',
                 categoria_id: initialData.categoria_id || 0,
@@ -84,7 +84,8 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
                 <Modal.Title>{initialData ? 'Editar Producto' : 'Crear Producto'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>
+                
+                <Form className="grid grid-cols-2 gap-4">
                     <Form.Group className="mb-3" controlId="formName">
                         <Form.Label>Nombre</Form.Label>
                         <Form.Control
@@ -96,17 +97,7 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
                             autoFocus
                         />
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="formDescripcion">
-                        <Form.Label>Descripción</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            name="descripcion"
-                            value={formData.descripcion}
-                            onChange={handleChange}
-                            rows={3}
-                            placeholder="Descripción del producto"
-                        />
-                    </Form.Group>
+                
                     <Form.Group className="mb-3" controlId="formPrecio">
                         <Form.Label>Precio</Form.Label>
                         <Form.Control

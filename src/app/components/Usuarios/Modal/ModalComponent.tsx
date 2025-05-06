@@ -78,7 +78,7 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
                 <Modal.Title>{initialData ? 'Editar Usuario' : 'Crear Usuario'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>
+                <Form className="grid grid-cols-2 gap-4">
                     <Form.Group className="mb-3" controlId="formName">
                         <Form.Label>Nombre</Form.Label>
                         <Form.Control
