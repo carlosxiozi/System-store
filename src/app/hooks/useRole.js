@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getRoles,getPermissions } from '../helpers/Roles';
+import { getRoles, syncPermisos } from '../helpers/Roles';
 
 export function useGetRoles() {
     const [roles, setRoles] = useState(null);
@@ -29,7 +29,7 @@ export function useSyncPermissions(id, permissions) {
     useEffect(() => {
       async function fetchPermissions() {
         try {
-          const result = await getPermissions(id, permissions);
+          const result = await syncPermisos(id, permissions);
           setData(result);
         } catch (err) {
           setError(err);

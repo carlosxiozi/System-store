@@ -2,98 +2,155 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Image from 'next/image';
 import Swal from 'sweetalert2';
-import Button from 'react-bootstrap/Button';
+import { FaUserCircle, FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Login from '@/app/helpers/auth';
-
+import { useEffect } from 'react';
 function Auth() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [validated, setValidated] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
+    const [loadingText, setLoadingText] = useState('Cargando');
+
+
+    useEffect(() => {
+        if (!isLoading) {
+            setLoadingText('Cargando');
+            return;
+        }
+
+        let dots = '';
+        const interval = setInterval(() => {
+            dots = dots.length >= 3 ? '' : dots + '.';
+            setLoadingText(`Cargando${dots}`);
+        }, 400);
+
+        return () => clearInterval(interval);
+    }, [isLoading]);
 
     interface User {
         email: string;
         password: string;
     }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-        e.preventDefault(); 
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true);
 
-        if (e.currentTarget.checkValidity() === false) {
-            setValidated(true);
-            return;  
-        }
-        setValidated(true); 
-
-        const user: User = {
-            email,
-            password
-        };
+        const user: User = { email, password };
 
         try {
-            const response = await Login(user); 
+            const response = await Login(user);
             if (response.type === 'success') {
-                localStorage.setItem('token', response.token || '');  
+                localStorage.setItem('token', response.token || '');
                 Swal.fire({
                     title: "Inicio de sesión exitoso",
                     icon: "success",
-                    draggable: true
+                    confirmButtonColor: "#3085d6",
                 });
-                router.push('components/Dashboard');      
-            } 
-        } catch  {
+                router.push('components/Dashboard');
+            }
+        } catch {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
                 text: "Hubo un error al intentar iniciar sesión.",
             });
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-blue-400">
-            <div className="bg-white p-8 rounded shadow-md w-2xl h-124 flex">
-                <div className="w-1/2 flex items-center justify-center">
-                    <img src="/tienda.jpg" className="h-full w-full object-cover" />
-                </div>
-                <div className="w-1/2 flex flex-col justify-center px-8">
-                    <p className="text-black">Sistema Tienda</p>
-                    <h2 className="text-2xl text-black mb-6 text-center p-4">Iniciar Sesión</h2>
-                    
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                        <Form.Group  className="mb-4"  as={Col} md="12" controlId="validationCustom01">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                required
-                                type="email"
-                                placeholder="Enter email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Por favor ingresa un email válido
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mb-4" controlId="formGroupPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                required
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                minLength={6}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                La contraseña debe tener al menos 6 caracteres
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Button className='w-48 items-end justify-end' type="submit">Iniciar sesión</Button>
-                    </Form>
+        <div className="w-screen h-screen relative overflow-hidden">
+            {/* Imagen de fondo con desenfoque */}
+            <div className="absolute inset-0 z-0">
+                <Image
+                    src="/tienda.jpg"
+                    alt="Tienda"
+                    fill
+                    className="object-cover filter blur-sm brightness-90"
+                    priority
+                />
+            </div>
+
+            {/* Contenedor centrado */}
+            <div className="absolute inset-0 z-10 flex items-center justify-center h-full">
+                <div className="flex flex-col md:flex-row bg-white bg-opacity-90 backdrop-blur-md rounded-lg shadow-xl w-full max-w-4xl overflow-hidden">
+                    {/* Imagen decorativa del lado izquierdo */}
+                    <div className="hidden md:flex md:w-1/2 bg-cover bg-center" style={{ backgroundImage: "url('/img.jpg')" }} />
+
+                    {/* Formulario de login del lado derecho */}
+                    <div className="w-full md:w-1/2 p-8 text-center">
+                        <div className="flex justify-center mb-4">
+                            <FaUserCircle className="text-blue-600" size={64} />
+                        </div>
+                        <h1 className="text-2xl font-bold text-gray-800 mb-2">Iniciar Sesión</h1>
+                        <p className="text-gray-600 mb-6">
+                            Bienvenido de nuevo. Inicia sesión para continuar.
+                        </p>
+
+                        <form onSubmit={handleSubmit}>
+                            {/* Email */}
+                            <div className="mb-4 text-left">
+                                <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="email">
+                                    Correo electrónico
+                                </label>
+                                <div className="flex items-center border rounded-lg px-3">
+                                    <FaEnvelope className="text-gray-400 mr-2" />
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        placeholder="correo@ejemplo.com"
+                                        className="w-full py-2 focus:outline-none text-black font-semibold"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Contraseña */}
+                            <div className="mb-6 text-left relative">
+                                <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="password">
+                                    Contraseña
+                                </label>
+                                <div className="flex items-center border rounded-lg px-3 relative">
+                                    <FaLock className="text-gray-400 mr-2" />
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        id="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                        placeholder="********"
+                                        className="w-full py-2 pr-8 focus:outline-none text-black font-semibold"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                                        tabIndex={-1}
+                                    >
+                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Botón */}
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
+                            >
+                                {isLoading ? loadingText : 'Iniciar sesión'}
+                            </button>
+
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

@@ -9,14 +9,14 @@ interface ModalPermissionProps {
 }
 
 const allPermissions = [
-  'Users', 'Roles', 'Role-Assignment', 'Appointments', 'Seguimientos',
-  'Historial', 'Sessions', 'Respuestas-Rapidas', 'Servicios', 'Dashboard', 'Configuración', 'Historial-Clinico',
+  'Usuarios', 'Roles', 'Productos', 'Categoria', 'Deudores',
+   'Reportes', 'Dashboard', 'Configuración',
 ];
 
 export default function ModalPermission({ role, onClose }: ModalPermissionProps) {
   const [currentPermissions, setCurrentPermissions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const { loading: syncLoading } = useSyncPermissions(role.id, currentPermissions); // Adjust destructuring based on the hook's return value
+  
 
   useEffect(() => {
     if (role?.permissions) {
@@ -26,34 +26,37 @@ export default function ModalPermission({ role, onClose }: ModalPermissionProps)
       setCurrentPermissions(formattedPermissions);
     }
   }, [role]);
-
+console.log('currentPermissions', currentPermissions);
+  console.log('role', role);
   const handleToggle = (perm: string) => {
     setCurrentPermissions((prev) =>
       prev.includes(perm) ? prev.filter((p) => p !== perm) : [...prev, perm]
     );
   };
 
+  const { syncPermissions, syncLoading } = useSyncPermissions();
+  
   const handleSave = async () => {
-    setLoading(true); // aquí usas tu función que hace el PUT
-    try {
-      await sync(); // Call the sync method returned by the hook
-      Swal.fire({
-        icon: 'success',
-        title: 'Permisos actualizados correctamente',
-        timer: 1500,
-        showConfirmButton: false,
-      });
-      onClose();
-    } catch {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al actualizar permisos',
-        text: 'Intenta nuevamente más tarde.',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+      setLoading(true); // aquí usas tu función que hace el PUT
+      try {
+        await syncPermissions(role.id, currentPermissions); // Call the sync method returned by the hook
+        Swal.fire({
+          icon: 'success',
+          title: 'Permisos actualizados correctamente',
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        onClose();
+      } catch {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al actualizar permisos',
+          text: 'Intenta nuevamente más tarde.',
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
 if(syncLoading) return <div className="flex justify-center items-center h-screen">Cargando...</div>;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm transition-opacity duration-300">
@@ -105,7 +108,5 @@ if(syncLoading) return <div className="flex justify-center items-center h-screen
     </div>
   );
 }
-function sync() {
-    throw new Error('Function not implemented.');
-}
+
 
