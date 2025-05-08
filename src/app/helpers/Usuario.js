@@ -15,7 +15,6 @@ export async function getUsuarios() {
     return data;
 }
 export async function createUsuarios(catalogo) {
-    console.log('Entrando al fetch:', catalogo);
 
     try {
         const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/usuarioscreate', {

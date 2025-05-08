@@ -8,9 +8,9 @@ interface Producto {
     id: number;
     name: string;
     descripcion: string;
-    precio: number;
-    categoria_id: string;
     code: string;
+    precio: number;
+    categoria_id: number;
 }
 
 interface ProductosTableProps {

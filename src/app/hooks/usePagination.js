@@ -17,6 +17,8 @@ export function usePagination(data, modelType, rowsPerPage = 10) {
                 return [item.device, item.token].filter(Boolean).join(' ');
             case 'productos':
                 return [item.name, item.descripcion, item.code].filter(Boolean).join(' ');
+            case 'deudores':
+                return [item.cliente.toLowerCase()].filter(Boolean).join(' ');
             default:
                 return '';
         }

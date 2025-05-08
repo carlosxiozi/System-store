@@ -24,7 +24,7 @@ export default function Sidebar() {
         { name: "Usuarios", icon: FaUsers, path: "/components/Usuarios" },
         { name: "Roles", icon: FaUserShield, path: "/components/Roles" },
         { name: "Configuración", icon: IoMdSettings, path: "/components/Config" },
-        { name: "Deudores", icon: MdMiscellaneousServices, path: "/components/Tratamientos" },
+        { name: "Deudores", icon: MdMiscellaneousServices, path: "/components/Deudores" },
         { name: "Reportes", icon: FaCalendarAlt, path: "/components/Reportes" },
         { name: "Categorias", icon: TbClipboardList, path: "/components/Categoria" },
         { name: "Productos", icon: MdWorkHistory, path: "/components/Productos" },

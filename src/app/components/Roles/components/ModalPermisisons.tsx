@@ -15,8 +15,7 @@ const allPermissions = [
 
 export default function ModalPermission({ role, onClose }: ModalPermissionProps) {
   const [currentPermissions, setCurrentPermissions] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  
+
 
   useEffect(() => {
     if (role?.permissions) {
@@ -26,37 +25,34 @@ export default function ModalPermission({ role, onClose }: ModalPermissionProps)
       setCurrentPermissions(formattedPermissions);
     }
   }, [role]);
-console.log('currentPermissions', currentPermissions);
-  console.log('role', role);
+
   const handleToggle = (perm: string) => {
     setCurrentPermissions((prev) =>
       prev.includes(perm) ? prev.filter((p) => p !== perm) : [...prev, perm]
     );
   };
-
   const { syncPermissions, syncLoading } = useSyncPermissions();
-  
+
   const handleSave = async () => {
-      setLoading(true); // aquí usas tu función que hace el PUT
-      try {
-        await syncPermissions(role.id, currentPermissions); // Call the sync method returned by the hook
-        Swal.fire({
-          icon: 'success',
-          title: 'Permisos actualizados correctamente',
-          timer: 1500,
-          showConfirmButton: false,
-        });
-        onClose();
-      } catch {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al actualizar permisos',
-          text: 'Intenta nuevamente más tarde.',
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      await syncPermissions(role.id, currentPermissions);
+      Swal.fire({
+        icon: 'success',
+        title: 'Permisos actualizados correctamente',
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      onClose();
+    } catch {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al actualizar permisos',
+        text: 'Intenta nuevamente más tarde.',
+      });
+    }
+  };
+  
+  
 if(syncLoading) return <div className="flex justify-center items-center h-screen">Cargando...</div>;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm transition-opacity duration-300">
@@ -96,12 +92,9 @@ if(syncLoading) return <div className="flex justify-center items-center h-screen
           </button>
           <button
             onClick={handleSave}
-            disabled={loading}
-            className={`px-5 py-2 text-white font-semibold rounded-md transition ${
-              loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-            }`}
+            className="px-5 py-2 text-white font-semibold rounded-md transition bg-blue-600 hover:bg-blue-700"
           >
-            {loading ? 'Guardando...' : 'Guardar'}
+            Guardar
           </button>
         </div>
       </div>

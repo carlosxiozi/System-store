@@ -21,27 +21,24 @@ export function useGetRoles() {
     }, []);
     return { roles, loading, error };
 }
-export function useSyncPermissions(id, permissions) {
-    const [data, setData] = useState(null); // estado principal
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-  
-    useEffect(() => {
-      async function fetchPermissions() {
-        try {
-          const result = await syncPermisos(id, permissions);
-          setData(result);
-        } catch (err) {
-          setError(err);
-        } finally {
-          setLoading(false);
-        }
-      }
-  
-      if (id) {
-        fetchPermissions();
-      }
-    }, [id, permissions]); // incluyo permissions en dependencias si cambian
-  
-    return { data, loading, error };
-  }
+
+export function useSyncPermissions() {
+  const [syncLoading, setSyncLoading] = useState(false);
+  const [syncError, setSyncError] = useState(null);
+
+  const syncPermissions = async (id, permissions) => {
+    setSyncLoading(true);
+    setSyncError(null);
+    try {
+      const result = await syncPermisos(id, permissions);
+      return result;
+    } catch (err) {
+      setSyncError(err);
+      throw err; // para que el componente pueda manejarlo
+    } finally {
+      setSyncLoading(false);
+    }
+  };
+
+  return { syncPermissions, syncLoading, syncError };
+}
