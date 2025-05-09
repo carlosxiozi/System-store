@@ -64,14 +64,14 @@ export async function destroy(id) {
     }
     return true;
 }
-export async function montoTotal(id,monto_total) {
-    console.log(id,monto_total)
+export async function montoTotal(data) {
+    
     const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/notes/updateTotal`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({id, monto_total }), 
+        body: JSON.stringify(data), 
     });
     console.log(response);
     const temp = await response.json();
@@ -81,13 +81,13 @@ export async function montoTotal(id,monto_total) {
     }
     return true;
 }
-export async function monto_pagado(id,monto_pagado) {
+export async function monto_pagado(data) {
     const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/notes/updatePayment`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id,monto_pagado }), 
+        body: JSON.stringify(data), 
     });
     if (!response.ok) {
         throw new Error('Error deleting notes data');

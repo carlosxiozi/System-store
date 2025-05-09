@@ -14,9 +14,9 @@ export default function ModalAbonarDeuda({ clientes, onClose }: { clientes: Clie
 
   const handleAbonar = async () => {
     if (!clienteId || !montoAbonar) return;
-
+const data= { id: clienteId, monto_pagado: montoAbonar };
     try {
-      await monto_pagado({ id: clienteId, monto_pagado: montoAbonar });
+      await monto_pagado(data);
 
       Swal.fire({
         icon: 'success',

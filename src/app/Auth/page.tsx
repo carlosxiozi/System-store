@@ -31,29 +31,31 @@ function Auth() {
         return () => clearInterval(interval);
     }, [isLoading]);
 
-    interface User {
-        email: string;
-        password: string;
-    }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
 
-        const user: User = { email, password };
-
         try {
-            const response = await Login(user);
+            const response = await Login({ email, password });
+
             if (response.type === 'success') {
-                localStorage.setItem('token', response.token || '');
                 Swal.fire({
                     title: "Inicio de sesión exitoso",
                     icon: "success",
                     confirmButtonColor: "#3085d6",
                 });
-                router.push('components/Dashboard');
+
+                router.push('/components/Dashboard'); 
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: response.message || "Credenciales incorrectas.",
+                });
             }
-        } catch {
+        } catch (error) {
+            console.error('Error en login:', error);
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -63,6 +65,7 @@ function Auth() {
             setIsLoading(false);
         }
     };
+
 
     return (
         <div className="w-screen h-screen relative overflow-hidden">

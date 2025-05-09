@@ -24,10 +24,10 @@ export default function ModalAgregarDeuda({
 
   const handleAgregarDeuda = async () => {
     if (!clienteId) return;
-
+const data= { id: clienteId, monto_total: totalSales };
     try {
       await onCompleteVenta(); // completar venta como normalmente
-      await montoTotal({ id: clienteId, monto_total: totalSales });
+      await montoTotal(data);
 
       Swal.fire({
         icon: 'success',
@@ -43,7 +43,7 @@ export default function ModalAgregarDeuda({
       });
     }
   };
-
+console.log(clienteId, totalSales);
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-md w-full max-w-md">

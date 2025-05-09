@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { FaStore } from "react-icons/fa";
 import {
   FaBell,
@@ -12,7 +12,19 @@ import {
 export default function Navbar() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+ interface User {
+   name: string;
+   role: string;
+   [key: string]: string | number | boolean | null | undefined; 
+ }
+ const [user, setUser] = useState<User | null>(null);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
   const userNotifications = [
     {
       id: 1,
@@ -106,10 +118,10 @@ export default function Navbar() {
           >
             <FaUserCircle className="w-6 h-6 text-blue-500" />
             <div className="flex flex-col leading-tight">
-              <span className="text-sm font-semibold truncate">Hola, Usuario</span>
-              <span className="text-[10px] bg-blue-600 text-white rounded-full px-2 py-0.5">
-                Admin
-              </span>
+              <span className="text-sm font-semibold truncate">Hola, {user?.name}</span>
+                <span className="text-[10px] bg-blue-600 text-white rounded-full px-2 py-0.5">
+                {user?.role?.toUpperCase()}
+                </span>
             </div>
             <FaCog className="w-4 h-4 hidden md:inline text-gray-400" />
             <FaChevronDown className="w-3 h-3 hidden md:inline text-gray-400" />

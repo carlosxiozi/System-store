@@ -9,8 +9,8 @@ interface ModalPermissionProps {
 }
 
 const allPermissions = [
-  'Usuarios', 'Roles', 'Productos', 'Categoria', 'Deudores',
-   'Reportes', 'Dashboard', 'Configuración',
+  'Usuarios', 'Roles', 'Productos', 'Categorias', 'Anotaciones',
+   'Reportes', 'Ventas', 'Configuracion',
 ];
 
 export default function ModalPermission({ role, onClose }: ModalPermissionProps) {

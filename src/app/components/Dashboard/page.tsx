@@ -92,7 +92,10 @@ const Dashboard = () => {
       setSearchInput("");
     }
   };
-
+  const handlecomplete = () => {
+    setPaymentAmount(totalSales);
+    setChange(0);
+  }
   const handleManualSearch = async () => {
     const code = searchInput.trim();
     if (!code) return;
@@ -224,9 +227,15 @@ const Dashboard = () => {
         <div className="md:w-1/4 w-full bg-white p-4 rounded-xl shadow-md">
           <h2 className="text-xl font-bold text-center mb-2">Totales</h2>
           <p>Productos: <strong>{totalProducts}</strong></p>
-          <p>Total: <strong>${totalSales.toFixed(2)}</strong></p>
+          <p className="text-2xl font-bold text-green-700 mt-2">Total: <span className="text-3xl">${totalSales.toFixed(2)}</span></p>
 
-          <label className="block mt-4">Pago:</label>
+          <label className="block mt-4 font-semibold text-gray-700">Pago con:</label>
+          <button
+            onClick={() => handlecomplete()}
+            className="bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold py-2 px-6 rounded-full shadow-md transition-all duration-200 ease-in-out mt-2"
+          >
+            💰 Pago completo
+          </button>
           <input
             type="number"
             value={paymentAmount}
@@ -235,12 +244,36 @@ const Dashboard = () => {
           />
           <p className="mt-2">Cambio: <strong>${change.toFixed(2)}</strong></p>
 
-          <div className="grid grid-cols-2 gap-2 mt-4">
-            <button onClick={completeSale} className="bg-green-600 text-white rounded py-2">Completar venta</button>
-            <button onClick={cancelSale} className="bg-red-500 text-white rounded py-2">Cancelar</button>
-            <button onClick={() => setShowModalDeuda(true)} className="bg-yellow-500 text-white rounded py-2">Agregar a deuda</button>
-            <button onClick={() => setShowModalAbono(true)} className="bg-gray-600 text-white rounded py-2">Abonar deuda</button>
+          <div className="grid grid-cols-2 gap-3 mt-6">
+            <button
+              onClick={completeSale}
+              className="bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-semibold py-2 rounded-full shadow transition-all duration-200"
+            >
+              ✅ Completar venta
+            </button>
+
+            <button
+              onClick={cancelSale}
+              className="bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white font-semibold py-2 rounded-full shadow transition-all duration-200"
+            >
+              ❌ Cancelar
+            </button>
+
+            <button
+              onClick={() => setShowModalDeuda(true)}
+              className="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-white font-semibold py-2 rounded-full shadow transition-all duration-200"
+            >
+              📒 Agregar a deuda
+            </button>
+
+            <button
+              onClick={() => setShowModalAbono(true)}
+              className="bg-gradient-to-r from-gray-500 to-gray-700 hover:from-gray-600 hover:to-gray-800 text-white font-semibold py-2 rounded-full shadow transition-all duration-200"
+            >
+              💵 Abonar deuda
+            </button>
           </div>
+
 
           {time && (
             <Card className="mt-4 bg-gray-50 shadow-sm">
