@@ -15,7 +15,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import CloseIcon from '@mui/icons-material/Close';
 
 interface Role {
-  id: number;
+  id: string | number;
   name: string;
   permissions: string[];
 }

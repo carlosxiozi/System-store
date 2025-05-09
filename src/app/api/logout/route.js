@@ -1,14 +1,13 @@
-// pages/api/logout.js
-import { serialize } from 'cookie';
+import { NextResponse } from 'next/server';
 
-export default function handler( res) {
-  res.setHeader('Set-Cookie', serialize('auth_token', '', {
+export async function POST() {
+  const response = NextResponse.json({ success: true });
+
+  response.cookies.set('auth_token', '', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
     path: '/',
-    expires: new Date(0) // expirarla
-  }));
+    expires: new Date(0),
+  });
 
-  res.status(200).json({ message: 'Cierre de sesión exitoso' });
+  return response;
 }
