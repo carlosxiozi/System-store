@@ -53,6 +53,7 @@ export default function Navbar() {
 
   const handleLogOut = async () => {
     await fetch("/api/logout");
+    localStorage.removeItem("user");
     window.location.href = "/";
   };
 
@@ -129,12 +130,7 @@ export default function Navbar() {
 
           {showDropdown && (
             <div className="absolute right-0 mt-2 w-48 bg-gray-900 text-gray-100 rounded-lg shadow-lg z-50 overflow-hidden">
-              <div
-                className="px-4 py-2 hover:bg-gray-800 cursor-pointer text-sm"
-                onClick={() => (window.location.href = "/components/Config")}
-              >
-                Mi cuenta
-              </div>
+            
               <div className="border-t border-gray-700" />
               <div
                 className="px-4 py-2 hover:bg-gray-800 cursor-pointer text-sm"

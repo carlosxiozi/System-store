@@ -1,88 +1,45 @@
 "use client";
-import React, { useState } from 'react';
-import { Button, Table, Spinner, Container } from 'react-bootstrap';
-import Loading from '@/app/Loading/page';
-type Venta = {
-  id: number;
-  fecha: string;
-  total: number;
-  created_at: string;
-  updated_at: string;
-};
+
+import React from 'react';
+import { Accordion, Container } from 'react-bootstrap';
+import ReporteGrafico from './components/ReporteGrafico';
+import { useProducto } from '@/app/hooks/useProductos';
+import { useGetNotes } from '@/app/hooks/useNotes';
+import GraficaTickets from './components/GraficaTickets';
+import GraficaDeudores from './components/GraficaDeudores';
 
 const ReportesVentas = () => {
-  const [ventas, setVentas] = useState<Venta[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [totalVentas, setTotalVentas] = useState(0);
-
-  const fetchVentas = async (tipo: 'getToday' | 'getMonth' | 'getYear') => {
-    setLoading(true);
-    try {
-      const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/ventas/reportes/${tipo}`);
-      const data = await response.json();
-      setVentas(data);
-      const total = data.reduce((sum: number, venta: Venta) => sum + Number(venta.total), 0);
-      setTotalVentas(total);
-    } catch (error) {
-      console.error('Error al obtener las ventas', error);
-      setVentas([]);
-      setTotalVentas(0);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { producto: catalogoDataFromApi = { data: [] } } = useProducto();
+  const { notes: fetchedNotes = { data: [] } } = useGetNotes();
 
   return (
-    <Container className="my-5 p-4 rounded shadow-lg bg-white">
-      <h2 className="text-2xl font-bold mb-4 text-center">Reporte de Ventas</h2>
+    <Container className="my-5">
+      <h2 className="text-3xl font-bold text-center mb-6">Reportes de Ventas</h2>
 
-      <div className="flex justify-center gap-4 mb-4">
-        <Button variant="primary" onClick={() => fetchVentas('getToday')}>Ventas por Día</Button>
-        <Button variant="success" onClick={() => fetchVentas('getMonth')}>Ventas por Mes</Button>
-        <Button variant="warning" onClick={() => fetchVentas('getYear')}>Ventas por Año</Button>
-      </div>
+      <Accordion defaultActiveKey="0" flush alwaysOpen>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>📊 Reportes de Ventas por Tiempo</Accordion.Header>
+          <Accordion.Body>
+            <ReporteGrafico tipo="getToday" titulo="Por Día" />
+            <ReporteGrafico tipo="getMonth" titulo="Por Mes" />
+            <ReporteGrafico tipo="getYear" titulo="Por Año" />
+          </Accordion.Body>
+        </Accordion.Item>
 
-      {loading && (
-        <div className="text-center my-4">
-          <Spinner animation="border" variant="primary" />
-        </div>
-      )}
+        <Accordion.Item eventKey="1">
+          <Accordion.Header>🥧 Productos Más Vendidos (Tickets)</Accordion.Header>
+          <Accordion.Body>
+            <GraficaTickets productos={catalogoDataFromApi?.data || []} />
+          </Accordion.Body>
+        </Accordion.Item>
 
-      {!loading && ventas.length === 0 && (
-        <Loading></Loading>
-      )}
-      
-
-      {!loading && ventas.length > 0 && (
-        <>
-          <Table bordered hover responsive className="rounded shadow-sm text-sm">
-            <thead className="bg-gray-100">
-              <tr>
-                <th>ID</th>
-                <th>Fecha</th>
-                <th>Total</th>
-                <th>Creado en</th>
-                <th>Actualizado en</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ventas.map((venta) => (
-                <tr key={venta.id}>
-                  <td>{venta.id}</td>
-                  <td>{venta.fecha}</td>
-                  <td>${Number(venta.total).toFixed(2)}</td>
-                  <td>{new Date(venta.created_at).toLocaleString()}</td>
-                  <td>{new Date(venta.updated_at).toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-
-          <div className="text-right text-lg font-semibold mt-3">
-            Total de Ventas: <span className="text-green-600">${totalVentas.toFixed(2)}</span>
-          </div>
-        </>
-      )}
+        <Accordion.Item eventKey="2">
+          <Accordion.Header>📈 Reporte de Deudores</Accordion.Header>
+          <Accordion.Body>
+            <GraficaDeudores notes={fetchedNotes?.data || []} />
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
     </Container>
   );
 };

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Swal from 'sweetalert2';
 import { FaUserCircle, FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Login from '@/app/helpers/auth';
+
 import { useEffect } from 'react';
 function Auth() {
     const [email, setEmail] = useState('');
@@ -14,6 +15,12 @@ function Auth() {
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
     const [loadingText, setLoadingText] = useState('Cargando');
+useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+        router.push('/components/Dashboard');
+    }
+}, [router]);
 
 
     useEffect(() => {

@@ -244,13 +244,16 @@ const Dashboard = () => {
           />
           <p className="mt-2">Cambio: <strong>${change.toFixed(2)}</strong></p>
 
-          <div className="grid grid-cols-2 gap-3 mt-6">
-            <button
-              onClick={completeSale}
-              className="bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-semibold py-2 rounded-full shadow transition-all duration-200"
-            >
-              ✅ Completar venta
-            </button>
+          <div className="grid grid-cols-2 gap-3 mt-6  ">
+            <div className="h-fit w-fit rounded-full">
+              <button
+                onClick={completeSale}
+                className="bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-semibold py-2 rounded-full  shadow transition-all duration-200"
+              >
+                ✅ Completar venta
+              </button>
+
+            </div>
 
             <button
               onClick={cancelSale}
