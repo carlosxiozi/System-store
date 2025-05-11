@@ -79,7 +79,7 @@ useEffect(() => {
             {/* Imagen de fondo con desenfoque */}
             <div className="absolute inset-0 z-0">
                 <Image
-                    src="/tienda.jpg"
+                    src="/etienda.jpg"
                     alt="Tienda"
                     fill
                     className="object-cover filter blur-sm brightness-90"
