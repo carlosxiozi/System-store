@@ -15,12 +15,12 @@ function Auth() {
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
     const [loadingText, setLoadingText] = useState('Cargando');
-useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-        router.push('/components/Dashboard');
-    }
-}, [router]);
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            router.push('/components/Dashboard');
+        }
+    }, [router]);
 
 
     useEffect(() => {
@@ -53,7 +53,7 @@ useEffect(() => {
                     confirmButtonColor: "#3085d6",
                 });
 
-                router.push('/components/Dashboard'); 
+                router.push('/components/Dashboard');
             } else {
                 Swal.fire({
                     icon: "error",
@@ -79,7 +79,7 @@ useEffect(() => {
             {/* Imagen de fondo con desenfoque */}
             <div className="absolute inset-0 z-0">
                 <Image
-                    src="/etienda.jpg"
+                    src="/tienda.jpg"
                     alt="Tienda"
                     fill
                     className="object-cover filter blur-sm brightness-90"
@@ -90,8 +90,15 @@ useEffect(() => {
             {/* Contenedor centrado */}
             <div className="absolute inset-0 z-10 flex items-center justify-center h-full">
                 <div className="flex flex-col md:flex-row bg-white bg-opacity-90 backdrop-blur-md rounded-lg shadow-xl w-full max-w-4xl overflow-hidden">
-                    {/* Imagen decorativa del lado izquierdo */}
-                    <div className="hidden md:flex md:w-1/2 bg-cover bg-center" style={{ backgroundImage: "url('/img.jpg')" }} />
+                    {/* Imagen decorativa centrada */}
+                    <div
+                        className="hidden md:flex md:w-1/2 h-[500px] bg-blue-100 bg-center bg-no-repeat bg-contain justify-center items-center"
+                        style={{ backgroundImage: "url('/etienda.jpg')" }}
+                    >
+                        {/* Puedes dejarlo vacío si es decorativo o agregar algo aquí */}
+                    </div>
+
+
 
                     {/* Formulario de login del lado derecho */}
                     <div className="w-full md:w-1/2 p-8 text-center">
