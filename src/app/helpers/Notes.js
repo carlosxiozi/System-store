@@ -1,5 +1,5 @@
 export async function getNotes() {
-    const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/notes',
+    const response = await fetch(process.env.REACT_APP_API_URL+'/notes',
         {
             method: 'GET',
             headers: {
@@ -15,7 +15,7 @@ export async function getNotes() {
 }
 export async function create(catalogo) {
     try {
-        const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/notes/create', {
+        const response = await fetch(process.env.REACT_APP_API_URL+'/notes/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export async function create(catalogo) {
 
 export async function update(catalogo) {
  
-    const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/notes/edit`, {
+    const response = await fetch(process.env.REACT_APP_API_URL+`/notes/edit`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export async function update(catalogo) {
     return data;
 }
 export async function destroy(id) {
-    const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/notes/delete`, {
+    const response = await fetch(process.env.REACT_APP_API_URL+`/notes/delete`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export async function destroy(id) {
 }
 export async function montoTotal(data) {
     
-    const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/notes/updateTotal`, {
+    const response = await fetch(process.env.REACT_APP_API_URL+`/notes/updateTotal`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export async function montoTotal(data) {
     return true;
 }
 export async function monto_pagado(data) {
-    const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/notes/updatePayment`, {
+    const response = await fetch(process.env.REACT_APP_API_URL+`/notes/updatePayment`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

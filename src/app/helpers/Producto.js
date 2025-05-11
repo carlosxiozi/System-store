@@ -1,5 +1,5 @@
 export async function getProductoApi() {
-    const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/productos',
+    const response = await fetch(process.env.REACT_APP_API_URL+'/productos',
         {
             method: 'GET',
             headers: {
@@ -17,7 +17,7 @@ export async function createProductoApi(catalogo) {
     console.log('Entrando al fetch:', catalogo);
 
     try {
-        const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/productos/create', {
+        const response = await fetch(process.env.REACT_APP_API_URL+'/productos/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export async function createProductoApi(catalogo) {
 }
 
 export async function updateProductoApi(catalogo) {
-    const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/productos/edit`, {
+    const response = await fetch(process.env.REACT_APP_API_URL+`/productos/edit`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export async function updateProductoApi(catalogo) {
     return data;
 }
 export async function deleteProductoApi(id) {
-    const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/productos/delete`, {
+    const response = await fetch(process.env.REACT_APP_API_URL+`/productos/delete`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export async function deleteProductoApi(id) {
     return true;
 }
 export async function getCategoriaById(id) {
-    const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/categorias/${id}`, {
+    const response = await fetch(process.env.REACT_APP_API_URL+`/categorias/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export async function getCategoriaById(id) {
     return data;
 }
 export async function getCategoriasApi() {
-    const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/categorias', {
+    const response = await fetch(process.env.REACT_APP_API_URL+'/categorias', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 export async function getUsuarios() {
-    const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/usuarios',
+    const response = await fetch(process.env.REACT_APP_API_URL + '/usuarios',
         {
             method: 'GET',
             headers: {
@@ -17,7 +17,7 @@ export async function getUsuarios() {
 export async function createUsuarios(catalogo) {
 
     try {
-        const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/usuarioscreate', {
+        const response = await fetch(process.env.REACT_APP_API_URL +'/usuarioscreate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export async function createUsuarios(catalogo) {
 }
 
 export async function updateUsuario(catalogo) {
-    const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/usuarios/edit`, {
+    const response = await fetch(process.env.REACT_APP_API_URL + `/edit`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export async function updateUsuario(catalogo) {
     return data;
 }
 export async function deleteUsario(id) {
-    const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/usuarios/delete`, {
+    const response = await fetch(process.env.REACT_APP_API_URL +`/usuarios/delete`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
