@@ -1,20 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { Inter, Roboto_Mono } from "next/font/google";
+
+const geistSans = Inter({ subsets: ["latin"] });
+const geistMono = Roboto_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sistema Tienda",
+  title: "Sistemas Tienda",
   description: "Producto de prueba para la tienda",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -24,11 +20,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+  <head>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/icons/icono-192x192.jpg" />
+    <meta name="theme-color" content="#00bfff" />
+  </head>
+  <body
+    className={`${geistSans.style} ${geistMono.style} antialiased`}
+  >
+    {children}
+  </body>
+</html>
+
   );
 }
