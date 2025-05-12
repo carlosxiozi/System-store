@@ -25,7 +25,7 @@ const ProductosPage: React.FC = () => {
     
         // Enviar el archivo al backend
         try {
-            const response = await fetch('https://sistema-tiendasss-1.onrender.com/api/productos/import', {
+            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/productos/import', {
                 method: 'POST',
                 body: formData, // Enviar el archivo como FormData
             });
