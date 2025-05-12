@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import sweatAlert2 from 'sweetalert2';
-
+import { useGetRoles } from '@/app/hooks/useRole';
 interface ModalProps {
     show: boolean;
     handleClose: () => void;
@@ -20,7 +20,11 @@ interface ModalProps {
     };
     onSave: (data: { id?: number; name: string; email: string; role: string; password?: string }) => void;
 }
-
+interface Role {
+    id: string;
+    name: string;
+    permissions: string[];
+}
 const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, onSave }) => {
     const [formData, setFormData] = useState({
         name: '',
@@ -30,14 +34,14 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
         created_at: '',
         updated_at: '',
     });
-
+    const { roles = [] as Role[], } = useGetRoles();
     useEffect(() => {
         if (initialData) {
             setFormData({
                 name: initialData.name || '',
                 email: initialData.email || '',
                 role: initialData.role || '',
-                password: '', // Password should not be pre-filled for security reasons
+                password: '', 
                 created_at: initialData.created_at || '',
                 updated_at: initialData.updated_at || '',
             });
@@ -55,7 +59,7 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
     };
 
     const handleSave = () => {
-        if (!formData.name || !formData.email || !formData.role ) {
+        if (!formData.name || !formData.email || !formData.role) {
             sweatAlert2.fire({
                 icon: 'error',
                 title: 'Error',
@@ -116,11 +120,14 @@ const ModalComponent: React.FC<ModalProps> = ({ show, handleClose, initialData, 
                             name="role"
                             value={formData.role}
                             onChange={handleChange}
-                            aria-label="Default select example"
+                            aria-label="Selecciona un rol"
                         >
                             <option value="">Selecciona un rol</option>
-                            <option value="ADMIN">ADMIN</option>
-                            <option value="Usuario">Usuario</option>
+                            {roles?.map((role) => (
+                                <option key={role.id} value={role.name}>
+                                    {role.name}
+                                </option>
+                            ))}
                         </Form.Select>
                     </Form.Group>
                 </Form>

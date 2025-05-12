@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useRouter } from "next/navigation";
 import Sidebar from "@/app/components/Sidebar/page";
-
+import Loading from "@/app/Loading/page";
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, [isAuthenticated, router]);
 
   if (isAuthenticated === null) {
-    return <div>Cargando...</div>;
+    return <Loading></Loading>
   }
 
   return (

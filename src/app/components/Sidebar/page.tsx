@@ -55,7 +55,6 @@ export default function Sidebar() {
         { name: "Ventas", icon: MdDashboard, path: "/components/Dashboard" },
         { name: "Usuarios", icon: FaUsers, path: "/components/Usuarios" },
         { name: "Roles", icon: FaUserShield, path: "/components/Roles" },
-        { name: "Configuracion", icon: IoMdSettings, path: "/components/Config" },
         { name: "Anotaciones", icon: LuUsersRound, path: "/components/Deudores" },
         { name: "Reportes", icon: FaCalendarAlt, path: "/components/Reportes" },
         { name: "Categorias", icon: TbClipboardList, path: "/components/Categoria" },

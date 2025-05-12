@@ -20,7 +20,7 @@ const UsuariosPage: React.FC = () => {
 
     const { currentRows, totalPages, currentPage, handleChangePage, handleSearchChange, search } =
         usePagination(catalogoDataFromApi?.data || [], 'users');
-
+    
     const handleCreate = () => {
         setInitialData({ name: '', email: '', role: '', created_at: '', updated_at: '' });
         setShowModal(true);
@@ -92,7 +92,7 @@ const UsuariosPage: React.FC = () => {
                         className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition"
                     >
                         Crear Usuario
-                    
+
                     </button>
                 </div>
                 <input
@@ -191,7 +191,7 @@ const UsuariosPage: React.FC = () => {
                             onClick={() => handleChangePage(Math.min(currentPage + 1, totalPages))}
                             disabled={currentPage === totalPages}
                         >
-                           {'>'}
+                            {'>'}
                         </button>
                     </nav>
                 </div>

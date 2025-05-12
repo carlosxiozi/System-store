@@ -39,7 +39,7 @@ export async function createUsuarios(catalogo) {
 }
 
 export async function updateUsuario(catalogo) {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/edit`, {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/usuarios/edit`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
