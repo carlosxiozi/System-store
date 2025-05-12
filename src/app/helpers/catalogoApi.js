@@ -1,5 +1,5 @@
 export async function getCatalogoApi() {
-    const response = await fetch(process.env.REACT_APP_API_URL+'/categorias',
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/categorias',
         {
             method: 'GET',
             headers: {
@@ -17,7 +17,7 @@ export async function createCatalogoApi(catalogo) {
     console.log('Entrando al fetch:', catalogo);
 
     try {
-        const response = await fetch(process.env.REACT_APP_API_URL+'/categorias/create', {
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/categorias/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export async function createCatalogoApi(catalogo) {
 }
 
 export async function updateCatalogoApi(catalogo) {
-    const response = await fetch(process.env.REACT_APP_API_URL+`/categorias/edit`, {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL+`/categorias/edit`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export async function updateCatalogoApi(catalogo) {
     return data;
 }
 export async function deleteCatalogoApi(id) {
-    const response = await fetch(process.env.REACT_APP_API_URL+`/categorias/delete`, {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL+`/categorias/delete`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

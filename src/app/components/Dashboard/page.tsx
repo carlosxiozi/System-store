@@ -73,7 +73,7 @@ const Dashboard = () => {
 
   const handleScan = async (code: string) => {
     try {
-      const res = await fetch(`https://sistema-tiendasss-1.onrender.com/api/productos/code/${code}`);
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL+ `/productos/code/${code}`);
       if (!res.ok) throw new Error("Producto no encontrado");
 
       const data = await res.json();
@@ -101,7 +101,7 @@ const Dashboard = () => {
     if (!code) return;
 
     try {
-      const res = await fetch(`https://sistema-tiendasss-1.onrender.com/api/productos/code/${code}`);
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL+`/productos/code/${code}`);
       if (!res.ok) throw new Error();
 
       const data = await res.json();
@@ -132,7 +132,7 @@ const Dashboard = () => {
     }
 
     try {
-      await fetch("https://sistema-tiendasss-1.onrender.com/api/ventas/create", {
+      await fetch(process.env.NEXT_PUBLIC_API_URL+"/ventas/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

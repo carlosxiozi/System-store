@@ -1,5 +1,5 @@
 export async function getRoles() {
-    const response = await fetch(process.env.REACT_APP_API_URL +'/roles',
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL +'/roles',
         {
             method: 'GET',
             headers: {
@@ -16,7 +16,7 @@ export async function getRoles() {
 }
 export async function create(data) {
     try {
-        const response = await fetch(process.env.REACT_APP_API_URL+'/roles/create', {
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/roles/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export async function create(data) {
 }
 
 export async function update(data) {
-    const response = await fetch( process.env.REACT_APP_API_URL+'/roles/edit', {
+    const response = await fetch( process.env.NEXT_PUBLIC_API_URL+'/roles/edit', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export async function update(data) {
 }
 
 export async function destroy(id) {
-    const response = await fetch(process.env.REACT_APP_API_URL+ `/roles/delete`, {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL+ `/roles/delete`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export async function destroy(id) {
 }
 
 export async function syncPermisos(id, permissions) {
-    const response = await fetch(process.env.REACT_APP_API_URL+'/roles/updatePermisos',
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/roles/updatePermisos',
         {
             method: 'PUT',
             headers: {

@@ -1,7 +1,8 @@
 // services/Login.js
 
 const login = async (data) => {
-  const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+  console.log('Login data:', data);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -13,7 +14,6 @@ const login = async (data) => {
   const responseData = await response.json();
 console.log(responseData);
   if (responseData.type === 'success') {
-    // 1. Guardar user en localStorage (para mostrar info en el frontend)
     localStorage.setItem('user', JSON.stringify(responseData.user));
 
     await fetch('/api/set-token', {
