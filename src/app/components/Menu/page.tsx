@@ -61,7 +61,7 @@ export default function Navbar() {
   return (
     <header className="flex justify-between items-center px-4 md:px-6 py-3 bg-gray-800 text-white shadow-md  top-0 left-0 right-0 z-30 sticky">
       {/* Izquierda */}
-      <div className="flex items-center justify-center gap-2 cursor-pointer" onClick={() => (window.location.href = "/")}>
+      <div className="flex items-center justify-center gap-2 cursor-pointer">
         <FaStore className="w-7 h-7 text-blue-500" />
         <span className="text-lg text-white font-bold">Sistema Store</span>
       </div>

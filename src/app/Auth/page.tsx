@@ -22,7 +22,6 @@ function Auth() {
         }
     }, [router]);
 
-
     useEffect(() => {
         if (!isLoading) {
             setLoadingText('Cargando');
