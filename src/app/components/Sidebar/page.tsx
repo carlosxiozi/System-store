@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useState, useEffect, useMemo } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { IoMdSettings, IoIosCloseCircle } from "react-icons/io";
+import {  IoIosCloseCircle } from "react-icons/io";
 import { LuUsersRound } from "react-icons/lu";
 
 import { MdDashboard, MdWorkHistory } from "react-icons/md";
