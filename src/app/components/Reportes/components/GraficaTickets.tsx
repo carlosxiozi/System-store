@@ -28,7 +28,7 @@ const GraficaTickets: React.FC<Props> = ({ productos }) => {
 useEffect(() => {
   const fetchTickets = async () => {
     try {
-      const response = await fetch("https://sistema-tiendasss-1.onrender.com/api/tickets");
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL+ "/api/tickets");
       const json = await response.json();
 
       // 👇 Asegúrate de usar el array correcto

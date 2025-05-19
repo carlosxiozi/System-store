@@ -38,7 +38,7 @@ const ReporteGrafico: React.FC<Props> = ({ tipo, titulo }) => {
     const fetchVentas = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`https://sistema-tiendasss-1.onrender.com/api/ventas/reportes/${tipo}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ventas/reportes/${tipo}`);
         const data = await response.json();
         setVentas(data);
         const total = data.reduce((sum: number, venta: Venta) => sum + Number(venta.total), 0);
